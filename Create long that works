@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hot Week Finder — Global</title>
+
+  <!-- Tailwind CDN: fine for development. For production, install Tailwind properly. -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Three.js (include exactly once) -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.min.js" defer></script>
+  <!-- Globe.gl (UMD). We also try a fallback source in-code if this fails to load. -->
+  <script id="globe-lib" src="https://cdn.jsdelivr.net/npm/globe.gl@2.33.5/dist/globe.gl.min.js" defer></script>
+
+  <!-- Leaflet (2D fallback) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" defer></script>
+
+  <style>
+    :root{--bg:#0b0b0c;--fg:#fff}
+    html,body{background:var(--bg);color:var(--fg);font-family:ui-sans-serif,system-ui,Inter,Segoe UI,Roboto,Arial}
+    .card{background:#111318;border:1px solid #1f2430;border-radius:18px;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+    .chip{background:#0e7490;opacity:.85}
+    .link{color:#7dd3fc}
+    .link:hover{text-decoration:underline}
+    .globe-wrap{width:100%;height:34vh}
+    @media (min-width: 768px){.globe-wrap{height:42vh}}
+    #globe{width:100%;height:100%;overflow:hidden;border-radius:12px}
+    #globe canvas{border-radius:12px;display:block}
+    #leafletMap{width:100%;height:100%;border-radius:12px}
+    .toggle{cursor:pointer}
+    #diag { font-size:12px }
+    #diag .ok{color:#86efac} #diag .bad{color:#fda4af}
+    .muted{color:#9ca3af}
+  </style>
+</head>
+<body>
+  <header class="sticky top-0 z-40 backdrop-blur bg-black/50 border-b border-white/10">
+    <div class="max-w-7xl mx-auto px-4 py-3 grid grid-cols-1 md:grid-cols-[1fr_auto] gap-3 items-center">
+      <div class="flex items-center gap-3">
+        <div class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse"></div>
+        <h1 class="text-lg font-semibold">Hot Week Finder</h1>
+        <p class="text-sm text-gray-400 hidden md:block">Worldwide warm breaks — this week or next month.</p>
+      </div>
+      <div class="flex items-center gap-3 text-xs text-gray-400 justify-end">
+        <div class="flex items-center gap-2 bg-black/40 border border-white/10 rounded-lg px-2 py-1">
+          <span>Data mode:</span>
+          <button id="mode-week" class="toggle px-2 py-1 rounded bg-cyan-600 text-white">This week</button>
+          <button id="mode-month" class="toggle px-2 py-1 rounded hover:bg-white/10">Next month</button>
+        </div>
+        <span>•</span>
+        <a class="link" href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo (live)</a>
+        <span>•</span>
+        <a class="link" href="https://open-meteo.com/en/docs/climate-api" target="_blank" rel="noopener">Climate API</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 md:px-6 pt-6 pb-24 grid md:grid-cols-[minmax(0,1fr)_420px] gap-6">
+    <section class="space-y-4">
+      <div class="card p-3">
+        <div class="globe-wrap rounded-xl">
+          <div id="globe"></div>
+          <div id="leafletMap" class="hidden"></div>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between">
+        <h2 class="text-base font-semibold">Top picks by style</h2>
+        <button id="refreshBtn" class="text-xs px-3 py-1.5 rounded-lg bg-cyan-600 hover:bg-cyan-500">Refresh</button>
+      </div>
+
+      <div class="space-y-6">
+        <section>
+          <h3 class="text-sm text-gray-300 mb-2">Close & Cheap</h3>
+          <div id="results-close-cheap" class="grid sm:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+        </section>
+        <section>
+          <h3 class="text-sm text-gray-300 mb-2">Far, Exotic & Expensive</h3>
+          <div id="results-far-expensive" class="grid sm:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+        </section>
+        <section>
+          <h3 class="text-sm text-gray-300 mb-2">Near but Boujie</h3>
+          <div id="results-near-boujie" class="grid sm:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+        </section>
+        <section>
+          <h3 class="text-sm text-gray-300 mb-2">Far & Thrifty</h3>
+          <div id="results-far-thrifty" class="grid sm:grid-cols-2 xl:grid-cols-3 gap-4"></div>
+        </section>
+      </div>
+
+      <details class="card p-3" id="diag" open>
+        <summary class="cursor-pointer select-none text-gray-300">Diagnostics</summary>
+        <ul id="diag-list" class="mt-2 list-disc pl-5 text-gray-400"></ul>
+      </details>
+    </section>
+
+    <aside class="card p-4">
+      <h3 class="text-sm font-semibold mb-3">Plan your trip</h3>
+      <form id="controls" class="space-y-4">
+        <div>
+          <label class="block text-xs text-gray-400 mb-1">Origin (IATA code or City)</label>
+          <input id="origin" class="w-full px-3 py-2 rounded-lg bg-black/40 border border-white/10" placeholder="e.g. LON, NYC, KLAX, DUB, CDG, AMS" value="LON" />
+          <p class="text-[11px] text-gray-500 mt-1">Tip: Use city code like <span class="px-1.5 py-0.5 rounded bg-black/40 border border-white/10">NYC</span> or FAA codes like <span class="px-1.5 py-0.5 rounded bg-black/40 border border-white/10">KLAX</span>.</p>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs text-gray-400 mb-1">Depart</label>
+            <input type="date" id="depart" class="w-full px-3 py-2 rounded-lg bg-black/40 border border-white/10" />
+          </div>
+          <div>
+            <label class="block text-xs text-gray-400 mb-1">Nights</label>
+            <input type="number" id="nights" min="2" max="21" step="1" value="4" class="w-full px-3 py-2 rounded-lg bg-black/40 border border-white/10" />
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3">
+          <div>
+            <label class="block text-xs text-gray-400 mb-1">Min avg temp (°C)</label>
+            <input type="range" id="minTemp" min="5" max="40" value="22" class="w-full" />
+            <div class="flex justify-between text-[11px] text-gray-500"><span>5</span><span id="minTempVal">22</span><span>40</span></div>
+          </div>
+          <div>
+            <label class="block text-xs text-gray-400 mb-1">Max rain chance (%)</label>
+            <input type="range" id="maxRain" min="0" max="100" value="30" class="w-full" />
+            <div class="flex justify-between text-[11px] text-gray-500"><span>0</span><span id="maxRainVal">30</span><span>100</span></div>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-3 items-end">
+          <div>
+            <label class="block text-xs text-gray-400 mb-1">Max flight time (hrs)</label>
+            <input type="range" id="maxHrs" min="1" max="24" value="6" class="w-full" />
+            <div class="flex justify-between items-center text-[11px] text-gray-500 gap-2">
+              <span>1</span><span id="maxHrsVal">6</span><span>24</span>
+              <label class="ml-2 flex items-center gap-1"><input type="checkbox" id="hrsUnlimited" checked> No limit</label>
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs text-gray-400 mb-1">Max distance (km)</label>
+            <input type="range" id="maxKm" min="200" max="20000" value="5000" class="w-full" />
+            <div class="flex justify-between items-center text-[11px] text-gray-500 gap-2">
+              <span>200</span><span id="maxKmVal">5000</span><span>20000</span>
+              <label class="ml-2 flex items-center gap-1"><input type="checkbox" id="kmUnlimited" checked> No limit</label>
+            </div>
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs text-gray-400 mb-1">Regions (worldwide)</label>
+          <div class="grid grid-cols-2 gap-2 text-sm" id="regionsBox"></div>
+          <p class="text-[11px] text-gray-500 mt-1">Tip: everything is selected by default.</p>
+        </div>
+        <div>
+          <label class="block text-xs text-gray-400 mb-1">Budget</label>
+          <div class="grid grid-cols-2 gap-2 text-sm">
+            <label class="flex items-center gap-2"><input type="checkbox" class="budget" value="cheap" checked>Cheap</label>
+            <label class="flex items-center gap-2"><input type="checkbox" class="budget" value="thrifty" checked>Thrifty</label>
+            <label class="flex items-center gap-2"><input type="checkbox" class="budget" value="boujie" checked>Boujie</label>
+            <label class="flex items-center gap-2"><input type="checkbox" class="budget" value="expensive" checked>Expensive</label>
+          </div>
+        </div>
+        <div>
+          <label class="block text-xs text-gray-400 mb-1">Flights Provider</label>
+          <select id="provider" class="w-full px-3 py-2 rounded-lg bg-black/40 border border-white/10">
+            <option value="google" selected>Google Flights (fast UX)</option>
+            <option value="skyscanner">Skyscanner (affiliate-ready)</option>
+          </select>
+        </div>
+        <div class="flex items-center justify-between">
+          <button type="submit" class="px-3 py-2 rounded-lg bg-cyan-600 hover:bg-cyan-500">Find places</button>
+          <button type="button" id="resetBtn" class="text-xs text-gray-400 hover:text-gray-200">Reset</button>
+        </div>
+        <p class="text-[11px] text-gray-500">Climate mode uses long-term monthly normals for the next month.</p>
+      </form>
+    </aside>
+  </main>
+
+  <footer class="max-w-7xl mx-auto px-4 md:px-6 pb-10 text-[12px] text-gray-500">
+    <p>Weather by <a class="link" href="https://open-meteo.com/" target="_blank">Open-Meteo</a> (live forecast) and <a class="link" href="https://open-meteo.com/en/docs/climate-api" target="_blank">Climate API</a> (historical normals). Flight links are deep links for convenience.</p>
+  </footer>
+
+  <script>
+  (function(){
+    // ---------- Small date helpers ----------
+    function todayISO(){
+      const d = new Date();
+      const m = String(d.getMonth()+1).padStart(2,'0');
+      const day = String(d.getDate()).padStart(2,'0');
+      return `${d.getFullYear()}-${m}-${day}`;
+    }
+    function addDaysISO(iso, days){
+      const d = new Date(iso);
+      d.setDate(d.getDate()+Number(days||0));
+      const m = String(d.getMonth()+1).padStart(2,'0');
+      const day = String(d.getDate()).padStart(2,'0');
+      return `${d.getFullYear()}-${m}-${day}`;
+    }
+    function formatDM(iso){
+      const d = new Date(iso);
+      return d.toLocaleDateString(undefined,{ day:'numeric', month:'short' });
+    }
+
+    // ---------- Diagnostics ----------
+    function logDiag(msg, ok){
+      const ul = document.getElementById('diag-list'); if(!ul) return;
+      const li = document.createElement('li');
+      li.innerHTML = '<span class=\"' + (ok?'ok':'bad') + '\">' + (ok?'PASS':'FAIL') + '</span> — ' + msg;
+      ul.appendChild(li);
+      (ok?console.info:console.warn)(msg);
+    }
+
+    // ---------- Affiliate/provider ----------
+    let AFFILIATE_MODE = 'google';
+    const AFFILIATE_ID = '';
+
+    // ---------- World regions ----------
+    const WORLD_REGIONS = [
+      'Europe','North Africa','Atlantic Islands','Middle East','Sub-Saharan Africa',
+      'North America','Latin America','Caribbean','Central America',
+      'South Asia','Southeast Asia','East Asia','Central Asia',
+      'Oceania','Indian Ocean'
+    ];
+
+    // ---------- Big destinations array (120+ cities) ----------
+    // budget: 'cheap' | 'thrifty' | 'boujie' | 'expensive'
+    const DESTINATIONS = [
+      // ===== EUROPE =====
+      { city:"Barcelona", country:"Spain", lat:41.3851, lon:2.1734, iata:"BCN", region:"Europe", budget:"thrifty", whyNow:"Tapas & beaches", socials:{ig:"barcelona"}, wiki:"Barcelona"},
+      { city:"Valencia", country:"Spain", lat:39.4699, lon:-0.3763, iata:"VLC", region:"Europe", budget:"cheap", whyNow:"City of Arts & paella", socials:{ig:"valencia"}, wiki:"Valencia"},
+      { city:"Alicante", country:"Spain", lat:38.3452, lon:-0.4810, iata:"ALC", region:"Europe", budget:"cheap", whyNow:"Costa Blanca sun", socials:{ig:"alicante"}, wiki:"Alicante"},
+      { city:"Málaga", country:"Spain", lat:36.7213, lon:-4.4214, iata:"AGP", region:"Europe", budget:"cheap", whyNow:"Museums + beach", socials:{ig:"malaga"}, wiki:"Málaga"},
+      { city:"Seville", country:"Spain", lat:37.3891, lon:-5.9845, iata:"SVQ", region:"Europe", budget:"thrifty", whyNow:"Alcázar & tapas", socials:{ig:"sevilla"}, wiki:"Seville"},
+      { city:"Madrid", country:"Spain", lat:40.4168, lon:-3.7038, iata:"MAD", region:"Europe", budget:"thrifty", whyNow:"Museums & food", socials:{ig:"madrid"}, wiki:"Madrid"},
+      { city:"Lisbon", country:"Portugal", lat:38.7223, lon:-9.1393, iata:"LIS", region:"Europe", budget:"thrifty", whyNow:"Miradouros & trams", socials:{ig:"lisbon"}, wiki:"Lisbon"},
+      { city:"Porto", country:"Portugal", lat:41.1579, lon:-8.6291, iata:"OPO", region:"Europe", budget:"cheap", whyNow:"Wine & azulejos", socials:{ig:"porto"}, wiki:"Porto"},
+      { city:"Faro", country:"Portugal", lat:37.0194, lon:-7.9304, iata:"FAO", region:"Europe", budget:"cheap", whyNow:"Algarve beaches", socials:{ig:"algarve"}, wiki:"Faro"},
+      { city:"Nice", country:"France", lat:43.7102, lon:7.2620, iata:"NCE", region:"Europe", budget:"boujie", whyNow:"Riviera views", socials:{ig:"nicefrance"}, wiki:"Nice"},
+      { city:"Marseille", country:"France", lat:43.2965, lon:5.3698, iata:"MRS", region:"Europe", budget:"thrifty", whyNow:"Calanques coast", socials:{ig:"marseille"}, wiki:"Marseille"},
+      { city:"Cagliari", country:"Italy", lat:39.2238, lon:9.1217, iata:"CAG", region:"Europe", budget:"thrifty", whyNow:"Sardinia beaches", socials:{ig:"sardegna"}, wiki:"Cagliari"},
+      { city:"Olbia", country:"Italy", lat:40.9234, lon:9.5037, iata:"OLB", region:"Europe", budget:"boujie", whyNow:"Costa Smeralda", socials:{ig:"costa_smeralda"}, wiki:"Olbia"},
+      { city:"Palermo", country:"Italy", lat:38.1157, lon:13.3615, iata:"PMO", region:"Europe", budget:"thrifty", whyNow:"Sicilian food", socials:{ig:"palermo"}, wiki:"Palermo"},
+      { city:"Catania", country:"Italy", lat:37.5079, lon:15.0830, iata:"CTA", region:"Europe", budget:"thrifty", whyNow:"Etna & coast", socials:{ig:"catania"}, wiki:"Catania"},
+      { city:"Rome", country:"Italy", lat:41.9028, lon:12.4964, iata:"FCO", region:"Europe", budget:"boujie", whyNow:"Icons + gelato", socials:{ig:"rome"}, wiki:"Rome"},
+      { city:"Naples", country:"Italy", lat:40.8518, lon:14.2681, iata:"NAP", region:"Europe", budget:"cheap", whyNow:"Pizza & Amalfi access", socials:{ig:"napoli"}, wiki:"Naples"},
+      { city:"Athens", country:"Greece", lat:37.9838, lon:23.7275, iata:"ATH", region:"Europe", budget:"thrifty", whyNow:"Acropolis sunsets", socials:{ig:"athensgreece"}, wiki:"Athens"},
+      { city:"Thessaloniki", country:"Greece", lat:40.6401, lon:22.9444, iata:"SKG", region:"Europe", budget:"cheap", whyNow:"Foodie port", socials:{ig:"thessaloniki"}, wiki:"Thessaloniki"},
+      { city:"Heraklion (Crete)", country:"Greece", lat:35.3387, lon:25.1442, iata:"HER", region:"Europe", budget:"thrifty", whyNow:"Crete beaches", socials:{ig:"crete"}, wiki:"Heraklion"},
+      { city:"Chania (Crete)", country:"Greece", lat:35.5138, lon:24.0180, iata:"CHQ", region:"Europe", budget:"thrifty", whyNow:"Balos & Elafonissi", socials:{ig:"chania"}, wiki:"Chania"},
+      { city:"Rhodes", country:"Greece", lat:36.4340, lon:28.2176, iata:"RHO", region:"Europe", budget:"thrifty", whyNow:"Medieval + beach", socials:{ig:"rhodes"}, wiki:"Rhodes"},
+      { city:"Larnaca", country:"Cyprus", lat:34.9003, lon:33.6232, iata:"LCA", region:"Europe", budget:"thrifty", whyNow:"Blue waters", socials:{ig:"cyprus"}, wiki:"Larnaca"},
+      { city:"Paphos", country:"Cyprus", lat:34.7720, lon:32.4297, iata:"PFO", region:"Europe", budget:"thrifty", whyNow:"Resorts & ruins", socials:{ig:"paphos"}, wiki:"Paphos"},
+      { city:"Dubrovnik", country:"Croatia", lat:42.6507, lon:18.0944, iata:"DBV", region:"Europe", budget:"boujie", whyNow:"Old Town on the sea", socials:{ig:"dubrovnik"}, wiki:"Dubrovnik"},
+      { city:"Split", country:"Croatia", lat:43.5081, lon:16.4402, iata:"SPU", region:"Europe", budget:"thrifty", whyNow:"Islands gateway", socials:{ig:"splitcroatia"}, wiki:"Split"},
+      { city:"Budva", country:"Montenegro", lat:42.2864, lon:18.8400, iata:"TGD", region:"Europe", budget:"thrifty", whyNow:"Adriatic sun", socials:{ig:"montenegro"}, wiki:"Budva"},
+      { city:"Madeira (Funchal)", country:"Portugal", lat:32.6669, lon:-16.9241, iata:"FNC", region:"Atlantic Islands", budget:"thrifty", whyNow:"Levadas & cliffs", socials:{ig:"madeira"}, wiki:"Funchal"},
+      { city:"Tenerife South", country:"Spain", lat:28.0464, lon:-16.5725, iata:"TFS", region:"Atlantic Islands", budget:"thrifty", whyNow:"Teide + beaches", socials:{ig:"tenerife"}, wiki:"Tenerife"},
+      { city:"Gran Canaria", country:"Spain", lat:28.1235, lon:-15.4363, iata:"LPA", region:"Atlantic Islands", budget:"thrifty", whyNow:"Dunes & sun", socials:{ig:"grancanaria"}, wiki:"Gran_Canaria"},
+      { city:"Lanzarote", country:"Spain", lat:28.9617, lon:-13.5470, iata:"ACE", region:"Atlantic Islands", budget:"thrifty", whyNow:"Volcanic beaches", socials:{ig:"lanzarote"}, wiki:"Lanzarote"},
+      { city:"Azores (Ponta Delgada)", country:"Portugal", lat:37.7412, lon:-25.6756, iata:"PDL", region:"Atlantic Islands", budget:"thrifty", whyNow:"Lakes & thermal", socials:{ig:"azores"}, wiki:"Ponta_Delgada"},
+
+      // ===== NORTH AFRICA / MIDDLE EAST =====
+      { city:"Marrakesh", country:"Morocco", lat:31.6295, lon:-7.9811, iata:"RAK", region:"North Africa", budget:"thrifty", whyNow:"Riads & souks", socials:{ig:"marrakech"}, wiki:"Marrakesh"},
+      { city:"Agadir", country:"Morocco", lat:30.4278, lon:-9.5981, iata:"AGA", region:"North Africa", budget:"cheap", whyNow:"Atlantic beaches", socials:{ig:"agadir"}, wiki:"Agadir"},
+      { city:"Essaouira", country:"Morocco", lat:31.5085, lon:-9.7595, iata:"ESU", region:"North Africa", budget:"cheap", whyNow:"Wind & medina", socials:{ig:"essaouira"}, wiki:"Essaouira"},
+      { city:"Casablanca", country:"Morocco", lat:33.5731, lon:-7.5898, iata:"CMN", region:"North Africa", budget:"thrifty", whyNow:"Gateway city", socials:{ig:"casablanca"}, wiki:"Casablanca"},
+      { city:"Tunis", country:"Tunisia", lat:36.8065, lon:10.1815, iata:"TUN", region:"North Africa", budget:"cheap", whyNow:"Medina & coast", socials:{ig:"tunis"}, wiki:"Tunis"},
+      { city:"Hammamet", country:"Tunisia", lat:36.4073, lon:10.6220, iata:"NBE", region:"North Africa", budget:"cheap", whyNow:"Beach resorts", socials:{ig:"hammamet"}, wiki:"Hammamet"},
+      { city:"Hurghada", country:"Egypt", lat:27.2579, lon:33.8116, iata:"HRG", region:"North Africa", budget:"cheap", whyNow:"Red Sea sun", socials:{ig:"hurghada"}, wiki:"Hurghada"},
+      { city:"Sharm El Sheikh", country:"Egypt", lat:27.9158, lon:34.3299, iata:"SSH", region:"North Africa", budget:"cheap", whyNow:"Reefs & resorts", socials:{ig:"sharmelsheikh"}, wiki:"Sharm_El_Sheikh"},
+      { city:"Dubai", country:"UAE", lat:25.2048, lon:55.2708, iata:"DXB", region:"Middle East", budget:"expensive", whyNow:"City & desert", socials:{ig:"visitdubai"}, wiki:"Dubai"},
+      { city:"Abu Dhabi", country:"UAE", lat:24.4539, lon:54.3773, iata:"AUH", region:"Middle East", budget:"boujie", whyNow:"Museums & beach", socials:{ig:"abudhabi"}, wiki:"Abu_Dhabi"},
+      { city:"Doha", country:"Qatar", lat:25.2854, lon:51.5310, iata:"DOH", region:"Middle East", budget:"boujie", whyNow:"Corniche & museums", socials:{ig:"visitqatar"}, wiki:"Doha"},
+      { city:"Muscat", country:"Oman", lat:23.5880, lon:58.3829, iata:"MCT", region:"Middle East", budget:"boujie", whyNow:"Wadis & beaches", socials:{ig:"oman"}, wiki:"Muscat"},
+      { city:"Eilat", country:"Israel", lat:29.5577, lon:34.9519, iata:"ETM", region:"Middle East", budget:"thrifty", whyNow:"Red Sea sun", socials:{ig:"eilat"}, wiki:"Eilat"},
+
+      // ===== SUB-SAHARAN AFRICA / INDIAN OCEAN =====
+      { city:"Cape Town", country:"South Africa", lat:-33.9249, lon:18.4241, iata:"CPT", region:"Sub-Saharan Africa", budget:"thrifty", whyNow:"Mountains & ocean", socials:{ig:"capetown"}, wiki:"Cape_Town"},
+      { city:"Durban", country:"South Africa", lat:-29.8587, lon:31.0218, iata:"DUR", region:"Sub-Saharan Africa", budget:"cheap", whyNow:"Warm Indian Ocean", socials:{ig:"durban"}, wiki:"Durban"},
+      { city:"Maputo", country:"Mozambique", lat:-25.9655, lon:32.5892, iata:"MPM", region:"Sub-Saharan Africa", budget:"thrifty", whyNow:"Seafood & coast", socials:{ig:"maputo"}, wiki:"Maputo"},
+      { city:"Zanzibar", country:"Tanzania", lat:-6.1659, lon:39.2026, iata:"ZNZ", region:"Sub-Saharan Africa", budget:"thrifty", whyNow:"Spice island", socials:{ig:"zanzibar"}, wiki:"Zanzibar"},
+      { city:"Mombasa", country:"Kenya", lat:-4.0435, lon:39.6682, iata:"MBA", region:"Sub-Saharan Africa", budget:"cheap", whyNow:"Kenyan coast", socials:{ig:"mombasa"}, wiki:"Mombasa"},
+      { city:"Seychelles (Mahé)", country:"Seychelles", lat:-4.6796, lon:55.4920, iata:"SEZ", region:"Indian Ocean", budget:"expensive", whyNow:"Granite beaches", socials:{ig:"seychelles"}, wiki:"Seychelles"},
+      { city:"Mauritius", country:"Mauritius", lat:-20.3484, lon:57.5522, iata:"MRU", region:"Indian Ocean", budget:"boujie", whyNow:"Lagoon life", socials:{ig:"mauritius"}, wiki:"Mauritius"},
+      { city:"Reunion (Saint-Denis)", country:"France", lat:-20.8821, lon:55.4507, iata:"RUN", region:"Indian Ocean", budget:"thrifty", whyNow:"Volcano hikes", socials:{ig:"reunionisland"}, wiki:"Réunion"},
+
+      // ===== NORTH AMERICA =====
+      { city:"Miami", country:"USA", lat:25.7617, lon:-80.1918, iata:"MIA", region:"North America", budget:"expensive", whyNow:"Beaches & nightlife", socials:{ig:"miami"}, wiki:"Miami"},
+      { city:"Orlando", country:"USA", lat:28.5383, lon:-81.3792, iata:"MCO", region:"North America", budget:"thrifty", whyNow:"Parks & pools", socials:{ig:"orlando"}, wiki:"Orlando"},
+      { city:"Tampa", country:"USA", lat:27.9506, lon:-82.4572, iata:"TPA", region:"North America", budget:"thrifty", whyNow:"Gulf beaches", socials:{ig:"tampa"}, wiki:"Tampa"},
+      { city:"San Diego", country:"USA", lat:32.7157, lon:-117.1611, iata:"SAN", region:"North America", budget:"expensive", whyNow:"SoCal sun", socials:{ig:"sandiego"}, wiki:"San_Diego"},
+      { city:"Los Angeles", country:"USA", lat:34.0522, lon:-118.2437, iata:"LAX", region:"North America", budget:"expensive", whyNow:"City + beach", socials:{ig:"losangeles"}, wiki:"Los_Angeles"},
+      { city:"Palm Springs", country:"USA", lat:33.8303, lon:-116.5453, iata:"PSP", region:"North America", budget:"boujie", whyNow:"Desert pools", socials:{ig:"palmsprings"}, wiki:"Palm_Springs,_California"},
+      { city:"Las Vegas", country:"USA", lat:36.1699, lon:-115.1398, iata:"LAS", region:"North America", budget:"thrifty", whyNow:"Pools & shows", socials:{ig:"lasvegas"}, wiki:"Las_Vegas"},
+      { city:"Phoenix", country:"USA", lat:33.4484, lon:-112.0740, iata:"PHX", region:"North America", budget:"cheap", whyNow:"Desert heat", socials:{ig:"phoenix"}, wiki:"Phoenix,_Arizona"},
+      { city:"Honolulu", country:"USA (Hawaii)", lat:21.3099, lon:-157.8581, iata:"HNL", region:"Oceania", budget:"expensive", whyNow:"Iconic surf", socials:{ig:"honolulu"}, wiki:"Honolulu"},
+      { city:"San Juan", country:"Puerto Rico", lat:18.4655, lon:-66.1057, iata:"SJU", region:"Caribbean", budget:"thrifty", whyNow:"Warm & easy", socials:{ig:"sanjuan"}, wiki:"San_Juan,_Puerto_Rico"},
+      { city:"Cancún", country:"Mexico", lat:21.1619, lon:-86.8515, iata:"CUN", region:"Caribbean", budget:"thrifty", whyNow:"Turquoise water", socials:{ig:"cancun"}, wiki:"Cancún"},
+      { city:"Cabo San Lucas", country:"Mexico", lat:22.8905, lon:-109.9167, iata:"SJD", region:"North America", budget:"boujie", whyNow:"Baja beaches", socials:{ig:"cabosanlucas"}, wiki:"Cabo_San_Lucas"},
+
+      // ===== CENTRAL AMERICA & CARIBBEAN =====
+      { city:"Punta Cana", country:"Dominican Republic", lat:18.5601, lon:-68.3725, iata:"PUJ", region:"Caribbean", budget:"thrifty", whyNow:"Resort beaches", socials:{ig:"puntacana"}, wiki:"Punta_Cana"},
+      { city:"Montego Bay", country:"Jamaica", lat:18.4762, lon:-77.8939, iata:"MBJ", region:"Caribbean", budget:"thrifty", whyNow:"Reggae & reefs", socials:{ig:"jamaica"}, wiki:"Montego_Bay"},
+      { city:"Nassau", country:"Bahamas", lat:25.0443, lon:-77.3504, iata:"NAS", region:"Caribbean", budget:"boujie", whyNow:"Cays & sands", socials:{ig:"bahamas"}, wiki:"Nassau"},
+      { city:"Aruba (Oranjestad)", country:"Aruba", lat:12.5211, lon:-69.9683, iata:"AUA", region:"Caribbean", budget:"boujie", whyNow:"Dry & sunny", socials:{ig:"aruba"}, wiki:"Aruba"},
+      { city:"Barbados (Bridgetown)", country:"Barbados", lat:13.0975, lon:-59.6167, iata:"BGI", region:"Caribbean", budget:"boujie", whyNow:"West Coast beaches", socials:{ig:"barbados"}, wiki:"Barbados"},
+      { city:"St Lucia (Castries)", country:"Saint Lucia", lat:14.0101, lon:-60.9875, iata:"UVF", region:"Caribbean", budget:"boujie", whyNow:"Pitons views", socials:{ig:"stlucia"}, wiki:"Saint_Lucia"},
+      { city:"Costa Rica (Liberia)", country:"Costa Rica", lat:10.6350, lon:-85.4377, iata:"LIR", region:"Central America", budget:"thrifty", whyNow:"Pacific coast", socials:{ig:"costarica"}, wiki:"Liberia,_Costa_Rica"},
+      { city:"Costa Rica (San José)", country:"Costa Rica", lat:9.9281, lon:-84.0907, iata:"SJO", region:"Central America", budget:"thrifty", whyNow:"Cloud forests + trips", socials:{ig:"costarica"}, wiki:"San_José,_Costa_Rica"},
+
+      // ===== SOUTH AMERICA =====
+      { city:"Rio de Janeiro", country:"Brazil", lat:-22.9068, lon:-43.1729, iata:"GIG", region:"Latin America", budget:"thrifty", whyNow:"Copacabana", socials:{ig:"riodejaneiro"}, wiki:"Rio_de_Janeiro"},
+      { city:"São Paulo", country:"Brazil", lat:-23.5505, lon:-46.6333, iata:"GRU", region:"Latin America", budget:"thrifty", whyNow:"Big-city breaks", socials:{ig:"saopaulo"}, wiki:"São_Paulo"},
+      { city:"Florianópolis", country:"Brazil", lat:-27.5949, lon:-48.5482, iata:"FLN", region:"Latin America", budget:"thrifty", whyNow:"Island beaches", socials:{ig:"floripa"}, wiki:"Florianópolis"},
+      { city:"Buenos Aires", country:"Argentina", lat:-34.6037, lon:-58.3816, iata:"EZE", region:"Latin America", budget:"thrifty", whyNow:"City vibes", socials:{ig:"buenosaires"}, wiki:"Buenos_Aires"},
+      { city:"Punta del Este", country:"Uruguay", lat:-34.9623, lon:-54.9511, iata:"PDP", region:"Latin America", budget:"boujie", whyNow:"Chic beach town", socials:{ig:"puntadeleste"}, wiki:"Punta_del_Este"},
+      { city:"Santiago", country:"Chile", lat:-33.4489, lon:-70.6693, iata:"SCL", region:"Latin America", budget:"thrifty", whyNow:"Sun + Andes", socials:{ig:"santiago"}, wiki:"Santiago"},
+      { city:"Cartagena", country:"Colombia", lat:10.3910, lon:-75.4794, iata:"CTG", region:"Latin America", budget:"thrifty", whyNow:"Walled city + beach", socials:{ig:"cartagena"}, wiki:"Cartagena,_Colombia"},
+      { city:"Lima", country:"Peru", lat:-12.0464, lon:-77.0428, iata:"LIM", region:"Latin America", budget:"thrifty", whyNow:"Food capital", socials:{ig:"lima"}, wiki:"Lima"},
+
+      // ===== SOUTH ASIA =====
+      { city:"Goa", country:"India", lat:15.2993, lon:74.1240, iata:"GOI", region:"South Asia", budget:"cheap", whyNow:"Beaches & shacks", socials:{ig:"goa"}, wiki:"Goa"},
+      { city:"Kochi", country:"India", lat:9.9312, lon:76.2673, iata:"COK", region:"South Asia", budget:"cheap", whyNow:"Kerala backwaters", socials:{ig:"kochi"}, wiki:"Kochi"},
+      { city:"Colombo", country:"Sri Lanka", lat:6.9271, lon:79.8612, iata:"CMB", region:"South Asia", budget:"thrifty", whyNow:"Tea & coast", socials:{ig:"srilanka"}, wiki:"Colombo"},
+      { city:"Malé", country:"Maldives", lat:4.1755, lon:73.5093, iata:"MLE", region:"Indian Ocean", budget:"expensive", whyNow:"Overwater villas", socials:{ig:"maldives"}, wiki:"Malé"},
+
+      // ===== SOUTHEAST ASIA =====
+      { city:"Bangkok", country:"Thailand", lat:13.7563, lon:100.5018, iata:"BKK", region:"Southeast Asia", budget:"cheap", whyNow:"Street food", socials:{ig:"bangkok"}, wiki:"Bangkok"},
+      { city:"Phuket", country:"Thailand", lat:7.8804, lon:98.3923, iata:"HKT", region:"Southeast Asia", budget:"thrifty", whyNow:"Islands & food", socials:{ig:"phuket"}, wiki:"Phuket"},
+      { city:"Krabi", country:"Thailand", lat:8.0863, lon:98.9063, iata:"KBV", region:"Southeast Asia", budget:"thrifty", whyNow:"Limestone bays", socials:{ig:"krabi"}, wiki:"Krabi"},
+      { city:"Koh Samui", country:"Thailand", lat:9.5120, lon:100.0136, iata:"USM", region:"Southeast Asia", budget:"boujie", whyNow:"Island resorts", socials:{ig:"kohsamui"}, wiki:"Ko_Samui"},
+      { city:"Da Nang", country:"Vietnam", lat:16.0544, lon:108.2022, iata:"DAD", region:"Southeast Asia", budget:"cheap", whyNow:"Beach & pagodas", socials:{ig:"danang"}, wiki:"Da_Nang"},
+      { city:"Nha Trang", country:"Vietnam", lat:12.2388, lon:109.1967, iata:"CXR", region:"Southeast Asia", budget:"cheap", whyNow:"Resort coast", socials:{ig:"nhatrang"}, wiki:"Nha_Trang"},
+      { city:"Hoi An (via Da Nang)", country:"Vietnam", lat:15.8801, lon:108.3380, iata:"DAD", region:"Southeast Asia", budget:"cheap", whyNow:"Heritage town", socials:{ig:"hoian"}, wiki:"Hội_An"},
+      { city:"Bali (Denpasar)", country:"Indonesia", lat:-8.65, lon:115.2167, iata:"DPS", region:"Southeast Asia", budget:"thrifty", whyNow:"Surf & rice terraces", socials:{ig:"bali"}, wiki:"Denpasar"},
+      { city:"Lombok", country:"Indonesia", lat:-8.6500, lon:116.3249, iata:"LOP", region:"Southeast Asia", budget:"cheap", whyNow:"Quieter than Bali", socials:{ig:"lombok"}, wiki:"Lombok"},
+      { city:"Labuan Bajo (Flores)", country:"Indonesia", lat:-8.4964, lon:119.8877, iata:"LBJ", region:"Southeast Asia", budget:"thrifty", whyNow:"Komodo islands", socials:{ig:"labuanbajo"}, wiki:"Labuan_Bajo"},
+      { city:"Singapore", country:"Singapore", lat:1.3521, lon:103.8198, iata:"SIN", region:"Southeast Asia", budget:"expensive", whyNow:"Clean & green", socials:{ig:"visitsingapore"}, wiki:"Singapore"},
+      { city:"Kuala Lumpur", country:"Malaysia", lat:3.1390, lon:101.6869, iata:"KUL", region:"Southeast Asia", budget:"cheap", whyNow:"Food & skylines", socials:{ig:"kualalumpur"}, wiki:"Kuala_Lumpur"},
+      { city:"Langkawi", country:"Malaysia", lat:6.35, lon:99.8, iata:"LGK", region:"Southeast Asia", budget:"thrifty", whyNow:"Duty-free islands", socials:{ig:"langkawi"}, wiki:"Langkawi"},
+      { city:"Penang (George Town)", country:"Malaysia", lat:5.4141, lon:100.3288, iata:"PEN", region:"Southeast Asia", budget:"cheap", whyNow:"Street food capital", socials:{ig:"penang"}, wiki:"George_Town,_Penang"},
+      { city:"Siem Reap", country:"Cambodia", lat:13.3671, lon:103.8448, iata:"SAI", region:"Southeast Asia", budget:"cheap", whyNow:"Angkor + pools", socials:{ig:"siemreap"}, wiki:"Siem_Reap"},
+      { city:"Phu Quoc", country:"Vietnam", lat:10.2899, lon:103.9840, iata:"PQC", region:"Southeast Asia", budget:"thrifty", whyNow:"Island beaches", socials:{ig:"phuquoc"}, wiki:"Phú_Quốc"},
+      { city:"Boracay (Caticlan)", country:"Philippines", lat:11.9804, lon:121.9189, iata:"MPH", region:"Southeast Asia", budget:"thrifty", whyNow:"White Beach", socials:{ig:"boracay"}, wiki:"Boracay"},
+      { city:"Cebu", country:"Philippines", lat:10.3157, lon:123.8854, iata:"CEB", region:"Southeast Asia", budget:"cheap", whyNow:"Reefs & canyons", socials:{ig:"cebu"}, wiki:"Cebu"},
+      { city:"El Nido (Palawan)", country:"Philippines", lat:11.2027, lon:119.4124, iata:"ENI", region:"Southeast Asia", budget:"boujie", whyNow:"Lagoons & karst", socials:{ig:"elnidopalawan"}, wiki:"El_Nido,_Palawan"},
+
+      // ===== EAST ASIA =====
+      { city:"Okinawa (Naha)", country:"Japan", lat:26.2124, lon:127.6809, iata:"OKA", region:"East Asia", budget:"boujie", whyNow:"Subtropical beaches", socials:{ig:"okinawa"}, wiki:"Okinawa"},
+      { city:"Ishigaki", country:"Japan", lat:24.3400, lon:124.1550, iata:"ISG", region:"East Asia", budget:"boujie", whyNow:"Yaeyama islands", socials:{ig:"ishigaki"}, wiki:"Ishigaki,_Okinawa"},
+      { city:"Fukuoka", country:"Japan", lat:33.5904, lon:130.4017, iata:"FUK", region:"East Asia", budget:"thrifty", whyNow:"Food & bays", socials:{ig:"fukuoka"}, wiki:"Fukuoka"},
+      { city:"Jeju", country:"South Korea", lat:33.4996, lon:126.5312, iata:"CJU", region:"East Asia", budget:"thrifty", whyNow:"Volcanic island", socials:{ig:"jeju"}, wiki:"Jeju_Island"},
+      { city:"Hong Kong", country:"China (HK)", lat:22.3193, lon:114.1694, iata:"HKG", region:"East Asia", budget:"expensive", whyNow:"Harbor skyline", socials:{ig:"hongkong"}, wiki:"Hong_Kong"},
+      { city:"Hualien (Taiwan)", country:"Taiwan", lat:23.9911, lon:121.6114, iata:"HUN", region:"East Asia", budget:"thrifty", whyNow:"Taroko coast", socials:{ig:"taiwan"}, wiki:"Hualien"},
+
+      // ===== CENTRAL ASIA =====
+      { city:"Almaty", country:"Kazakhstan", lat:43.2220, lon:76.8512, iata:"ALA", region:"Central Asia", budget:"cheap", whyNow:"Mountains & cafes", socials:{ig:"almaty"}, wiki:"Almaty"},
+
+      // ===== OCEANIA (including close to SYD) =====
+      { city:"Sydney", country:"Australia", lat:-33.8688, lon:151.2093, iata:"SYD", region:"Oceania", budget:"expensive", whyNow:"City/beach mix", socials:{ig:"sydney"}, wiki:"Sydney"},
+      { city:"Melbourne", country:"Australia", lat:-37.8136, lon:144.9631, iata:"MEL", region:"Oceania", budget:"thrifty", whyNow:"Culture & coffee", socials:{ig:"melbourne"}, wiki:"Melbourne"},
+      { city:"Brisbane", country:"Australia", lat:-27.4698, lon:153.0251, iata:"BNE", region:"Oceania", budget:"thrifty", whyNow:"Beachy city", socials:{ig:"brisbane"}, wiki:"Brisbane"},
+      { city:"Gold Coast", country:"Australia", lat:-28.0167, lon:153.4000, iata:"OOL", region:"Oceania", budget:"thrifty", whyNow:"Surf & parks", socials:{ig:"goldcoast"}, wiki:"Gold_Coast,_Queensland"},
+      { city:"Sunshine Coast", country:"Australia", lat:-26.6500, lon:153.0667, iata:"MCY", region:"Oceania", budget:"thrifty", whyNow:"Relaxed beaches", socials:{ig:"sunshinecoast"}, wiki:"Sunshine_Coast,_Queensland"},
+      { city:"Cairns", country:"Australia", lat:-16.9186, lon:145.7781, iata:"CNS", region:"Oceania", budget:"thrifty", whyNow:"Reef gateway", socials:{ig:"cairns"}, wiki:"Cairns"},
+      { city:"Whitsunday Coast", country:"Australia", lat:-20.2763, lon:148.7557, iata:"PPP", region:"Oceania", budget:"boujie", whyNow:"Islands & Whitehaven", socials:{ig:"whitsundays"}, wiki:"Whitsunday_Islands"},
+      { city:"Darwin", country:"Australia", lat:-12.4634, lon:130.8456, iata:"DRW", region:"Oceania", budget:"thrifty", whyNow:"Tropical Top End", socials:{ig:"darwin"}, wiki:"Darwin,_Northern_Territory"},
+      { city:"Perth", country:"Australia", lat:-31.9523, lon:115.8613, iata:"PER", region:"Oceania", budget:"thrifty", whyNow:"Sunniest capital", socials:{ig:"perth"}, wiki:"Perth"},
+      { city:"Adelaide", country:"Australia", lat:-34.9285, lon:138.6007, iata:"ADL", region:"Oceania", budget:"thrifty", whyNow:"Wine & coast", socials:{ig:"adelaide"}, wiki:"Adelaide"},
+      { city:"Hobart", country:"Australia", lat:-42.8821, lon:147.3272, iata:"HBA", region:"Oceania", budget:"thrifty", whyNow:"Cooler escape", socials:{ig:"hobart"}, wiki:"Hobart"},
+      { city:"Auckland", country:"New Zealand", lat:-36.8509, lon:174.7645, iata:"AKL", region:"Oceania", budget:"thrifty", whyNow:"Harbour city", socials:{ig:"auckland"}, wiki:"Auckland"},
+      { city:"Queenstown", country:"New Zealand", lat:-45.0312, lon:168.6626, iata:"ZQN", region:"Oceania", budget:"boujie", whyNow:"Adventure hub", socials:{ig:"queenstown"}, wiki:"Queenstown,_New_Zealand"},
+      { city:"Nadi", country:"Fiji", lat:-17.7765, lon:177.4350, iata:"NAN", region:"Oceania", budget:"boujie", whyNow:"Resorts & reefs", socials:{ig:"fiji"}, wiki:"Nadi"},
+      { city:"Nouméa", country:"New Caledonia", lat:-22.2740, lon:166.4416, iata:"NOU", region:"Oceania", budget:"boujie", whyNow:"French Pacific", socials:{ig:"noumea"}, wiki:"Nouméa"},
+      { city:"Port Vila", country:"Vanuatu", lat:-17.7333, lon:168.3273, iata:"VLI", region:"Oceania", budget:"thrifty", whyNow:"Lagoons & blue holes", socials:{ig:"vanuatu"}, wiki:"Port_Vila"},
+      { city:"Apia", country:"Samoa", lat:-13.8333, lon:-171.7667, iata:"APW", region:"Oceania", budget:"thrifty", whyNow:"Polynesian paradise", socials:{ig:"samoa"}, wiki:"Apia"}
+    ];
+
+    // ---------- Helpers ----------
+    const rad = d => d * Math.PI/180;
+    const avg = arr => arr.reduce((a,b)=>a+b,0)/arr.length;
+    function haversine(lat1, lon1, lat2, lon2){
+      const R=6371; const dLat=rad(lat2-lat1), dLon=rad(lon2-lon1);
+      const a=Math.sin(dLat/2)**2 + Math.cos(rad(lat1))*Math.cos(rad(lat2))*Math.sin(dLon/2)**2;
+      return 2*R*Math.asin(Math.sqrt(a));
+    }
+    function estFlightHours(km){ return (km/800) + 1.0; }
+    function fmt(n, d=0){ return Number(n).toFixed(d); }
+
+    function flightsLink(origin, destIATA, departISO, nights){
+      const retISO = addDaysISO(departISO, Number(nights||4));
+      if (AFFILIATE_MODE === 'skyscanner') {
+        const d1 = new Date(departISO), d2 = new Date(retISO);
+        const dd = `${String(d1.getFullYear()).slice(2)}${String(d1.getMonth()+1).padStart(2,'0')}${String(d1.getDate()).padStart(2,'0')}`;
+        const rd = `${String(d2.getFullYear()).slice(2)}${String(d2.getMonth()+1).padStart(2,'0')}${String(d2.getDate()).padStart(2,'0')}`;
+        return `https://www.skyscanner.com/transport/flights/${encodeURIComponent(String(origin).toLowerCase())}/${encodeURIComponent(String(destIATA).toLowerCase())}/${dd}/${rd}/?adultsv2=1${AFFILIATE_ID?`&associateid=${encodeURIComponent(AFFILIATE_ID)}`:''}`;
+      }
+      // Google Flights human-readable query (works reliably)
+      const q = `flights from ${origin} to ${destIATA} on ${departISO} returning ${retISO}`;
+      return `https://www.google.com/travel/flights?q=${encodeURIComponent(q)}`;
+    }
+    const gmSearch = city => `https://www.google.com/maps/search/${encodeURIComponent(city+' attractions')}`;
+    const wikiUrl = title => `https://en.wikipedia.org/wiki/${encodeURIComponent(title)}`;
+    const instaLink = tag => `https://www.instagram.com/explore/tags/${encodeURIComponent(tag)}/`;
+    const xSearch = q => `https://x.com/search?q=${encodeURIComponent(q)}&src=typed_query&f=top`;
+
+    function sunRating(score){
+      if(score >= 0.9) return {stars:5, text:"☀️☀️☀️☀️☀️ Dead cert — book it."};
+      if(score >= 0.75) return {stars:4, text:"☀️☀️☀️☀️ Dependable — good odds for sun."};
+      if(score >= 0.6) return {stars:3, text:"☀️☀️☀️ Occasional — decent bet if you’re lucky."};
+      if(score >= 0.45) return {stars:2, text:"☀️☀️ Patchy — an odd one this week."};
+      return {stars:1, text:"☀️ Mostly meh — don’t bet on it."};
+    }
+
+    // ---------- Weather APIs ----------
+    async function fetchForecast(lat, lon){
+      const start = todayISO();
+      const end = addDaysISO(start,6);
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=temperature_2m_max,precipitation_probability_max,sunshine_duration&timezone=auto&start_date=${start}&end_date=${end}`;
+      const r = await fetch(url); if(!r.ok) throw new Error('Forecast fetch failed');
+      const j = await r.json(); const d = j.daily;
+      const avgTemp = avg(d.temperature_2m_max);
+      const avgRain = avg(d.precipitation_probability_max);
+      const avgSunHrs = avg(d.sunshine_duration.map(s=>s/3600));
+      return { kind:'week', avgTemp, avgRain, avgSunHrs, raw:j };
+    }
+    async function fetchClimate(lat, lon){
+      const now = new Date();
+      const nm = new Date(now.getFullYear(), now.getMonth()+1, 1);
+      const month = nm.getMonth()+1; // 1..12
+      const url = `https://climate-api.open-meteo.com/v1/climate?latitude=${lat}&longitude=${lon}&start_year=1991&end_year=2020&month=${month}&models=ERA5&temperature_2m_mean=true&precipitation_sum=true&sunshine_duration=true`;
+      try{
+        const r = await fetch(url); if(!r.ok) throw new Error('Climate fetch failed');
+        const j = await r.json();
+        const m = j.monthly || j;
+        const t = Array.isArray(m.temperature_2m_mean) ? m.temperature_2m_mean[0] : m.temperature_2m_mean;
+        const p = Array.isArray(m.precipitation_sum) ? m.precipitation_sum[0] : m.precipitation_sum;
+        const s = (Array.isArray(m.sunshine_duration) ? m.sunshine_duration[0] : m.sunshine_duration) / 3600;
+        return { kind:'month', climTemp: t, climPrecip: p, climSunHrs: s, raw:j };
+      }catch{
+        const f = await fetchForecast(lat, lon);
+        return { kind:'month', climTemp: f.avgTemp, climPrecip: f.avgRain, climSunHrs: f.avgSunHrs, raw:f };
+      }
+    }
+
+    function scoreForecast(w){
+      const t = Math.min(45, Math.max(5, w.avgTemp)); const tempScore = (t-5)/(45-5);
+      const rainScore = 1 - Math.min(1, Math.max(0, w.avgRain/100));
+      const sunScore = Math.min(1, Math.max(0, w.avgSunHrs/12));
+      return tempScore*0.45 + sunScore*0.35 + rainScore*0.20;
+    }
+    function scoreClimate(w){
+      const t = Math.min(45, Math.max(5, w.climTemp ?? 0)); const tempScore = (t-5)/(45-5);
+      const rainScore = 1 - Math.min(1, Math.max(0, (w.climPrecip ?? 0)/120));
+      const sunScore = Math.min(1, Math.max(0, (w.climSunHrs ?? 6)/12));
+      return tempScore*0.50 + sunScore*0.30 + rainScore*0.20;
+    }
+
+    // ---------- Globe (with Leaflet fallback) ----------
+    let world, globeRO, leafletMap;
+    function ensureGlobeLoaded(){
+      return new Promise((resolve)=>{
+        const start = Date.now();
+        const check = ()=>{
+          if(window.Globe && window.THREE){ resolve('globe'); return; }
+          if(Date.now()-start > 2800){
+            const s = document.createElement('script');
+            s.src = 'https://unpkg.com/globe.gl@2.33.5/dist/globe.gl.min.js';
+            s.defer = true;
+            s.onload = ()=> resolve(window.Globe? 'globe' : 'pending');
+            document.head.appendChild(s);
+            return;
+          }
+          setTimeout(check, 80);
+        };
+        check();
+        setTimeout(()=> resolve('leaflet'), 5000);
+      });
+    }
+    async function initGlobeOrMap(){
+      const mode = await ensureGlobeLoaded();
+      const globeWrap = document.getElementById('globe');
+      const mapDiv = document.getElementById('leafletMap');
+
+      if(mode === 'globe' && window.Globe && window.THREE){
+        try{
+          const GlobeFactory = window.Globe;
+          world = GlobeFactory()(globeWrap)
+            .backgroundColor('#000000')
+            .globeImageUrl('https://unpkg.com/three-globe/example/img/earth-dark.jpg')
+            .bumpImageUrl('https://unpkg.com/three-globe/example/img/earth-topology.png')
+            .pointOfView({ lat: 25, lng: 0, altitude: 2.4 })
+            .arcsTransitionDuration(900)
+            .arcsAltitude(()=>0.12)
+            .arcsColor(()=>['#67e8f9','#67e8f9'])
+            .arcsStroke(0.6)
+            .pointsTransitionDuration(900)
+            .pointAltitude(0.01)
+            .pointColor(()=> '#22d3ee');
+          logDiag('Globe initialised', true);
+          const sizeToContainer = ()=>{ if(world) world.width(globeWrap.clientWidth).height(globeWrap.clientHeight); };
+          sizeToContainer();
+          if('ResizeObserver' in window){ globeRO = new ResizeObserver(sizeToContainer); globeRO.observe(globeWrap);} else { window.addEventListener('resize', sizeToContainer); }
+          setTimeout(sizeToContainer, 300);
+          logDiag('Using globe.gl renderer', true);
+          return 'globe';
+        }catch(e){ logDiag('Globe init threw: ' + e.message, false); }
+      }
+
+      // Fallback: Leaflet
+      globeWrap.classList.add('hidden');
+      mapDiv.classList.remove('hidden');
+      leafletMap = L.map('leafletMap', { worldCopyJump:true, zoomControl:false }).setView([20,0], 2);
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 5, attribution: '&copy; OpenStreetMap' }).addTo(leafletMap);
+      logDiag('Using Leaflet fallback map', true);
+      return 'leaflet';
+    }
+
+    // ---------- State & Controls ----------
+    const state = {
+      mode:'week',
+      origin:'LON',
+      depart: todayISO(),
+      nights:4,
+      minTemp:22, maxRain:30,
+      maxHrs:6, maxKm:5000,
+      hrsUnlimited:true, kmUnlimited:true,
+      regions:new Set(),
+      budgets:new Set(['cheap','thrifty','boujie','expensive'])
+    };
+
+    function setModeButtons(){
+      const w = document.getElementById('mode-week');
+      const m = document.getElementById('mode-month');
+      if(state.mode==='week'){ w.classList.add('bg-cyan-600','text-white'); m.classList.remove('bg-cyan-600','text-white'); }
+      else { m.classList.add('bg-cyan-600','text-white'); w.classList.remove('bg-cyan-600','text-white'); }
+    }
+    function renderRegions(){
+      const box = document.getElementById('regionsBox');
+      box.innerHTML = '';
+      WORLD_REGIONS.forEach(r=>{
+        const id = 'reg-'+r.replace(/\s+/g,'-');
+        const lbl = document.createElement('label'); lbl.className='flex items-center gap-2';
+        lbl.innerHTML = `<input type="checkbox" class="region" id="${id}" value="${r}" checked> ${r}`;
+        box.appendChild(lbl);
+        state.regions.add(r);
+      });
+    }
+
+    // ---------- Origin resolver ----------
+    function guessOriginCoords(code){
+      let k = (code||'').trim().toUpperCase();
+      if(/^K[A-Z]{3}$/.test(k)) k = k.slice(1); // FAA -> IATA
+
+      const P = {
+        // UK & Europe
+        'LON': {lat:51.4700, lon:-0.4543}, 'LHR': {lat:51.4700, lon:-0.4543}, 'LGW': {lat:51.1537, lon:-0.1821}, 'STN': {lat:51.8850, lon:0.2350}, 'LTN': {lat:51.8747, lon:-0.3683},
+        'DUB': {lat:53.4213, lon:-6.2701}, 'CDG': {lat:49.0097, lon:2.5479}, 'ORY': {lat:48.7262, lon:2.3652}, 'PAR': {lat:48.8566, lon:2.3522},
+        'AMS': {lat:52.3105, lon:4.7683}, 'FRA': {lat:50.0379, lon:8.5622}, 'MUC': {lat:48.3538, lon:11.7861}, 'BER': {lat:52.3667, lon:13.5033},
+        'MAD': {lat:40.4722, lon:-3.5608}, 'BCN': {lat:41.2974, lon:2.0833},
+        // North America
+        'NYC': {lat:40.7128, lon:-74.0060}, 'JFK': {lat:40.6413, lon:-73.7781}, 'EWR': {lat:40.6895, lon:-74.1745}, 'LGA': {lat:40.7769, lon:-73.8740},
+        'LAX': {lat:33.9416, lon:-118.4085}, 'SFO': {lat:37.6213, lon:-122.3790}, 'SEA': {lat:47.4502, lon:-122.3088}, 'ORD': {lat:41.9742, lon:-87.9073}, 'BOS': {lat:42.3656, lon:-71.0096},
+        'ATL': {lat:33.6407, lon:-84.4277}, 'MIA': {lat:25.7959, lon:-80.2870}, 'DFW': {lat:32.8998, lon:-97.0403}, 'DEN': {lat:39.8561, lon:-104.6737},
+        // LATAM
+        'MEX': {lat:19.4361, lon:-99.0719}, 'GRU': {lat:-23.4356, lon:-46.4731}, 'GIG': {lat:-22.8090, lon:-43.2506},
+        // Middle East & Africa
+        'DXB': {lat:25.2532, lon:55.3657}, 'DOH': {lat:25.2736, lon:51.6081}, 'CPT': {lat:-33.9696, lon:18.5972}, 'NBO': {lat:-1.3192, lon:36.9278},
+        // Asia & Oceania
+        'SIN': {lat:1.3644, lon:103.9915}, 'KUL': {lat:2.7456, lon:101.7090}, 'BKK': {lat:13.6900, lon:100.7501}, 'HKT': {lat:8.1111, lon:98.3061}, 'DPS': {lat:-8.7482, lon:115.1670},
+        'SYD': {lat:-33.9399, lon:151.1753}, 'MEL': {lat:-37.6690, lon:144.8410}, 'BNE': {lat:-27.3842, lon:153.1175}, 'AKL': {lat:-37.0082, lon:174.7850},
+        'HKG': {lat:22.3080, lon:113.9185}, 'ICN': {lat:37.4602, lon:126.4407}, 'NRT': {lat:35.7719, lon:140.3929}
+      };
+
+      const NAME = {
+        'LONDON':'LON','PARIS':'PAR','AMSTERDAM':'AMS','FRANKFURT':'FRA','MUNICH':'MUC','BERLIN':'BER','MADRID':'MAD','BARCELONA':'BCN',
+        'NEW YORK':'NYC','NY':'NYC','LOS ANGELES':'LAX','SAN FRANCISCO':'SFO','SEATTLE':'SEA','CHICAGO':'ORD','BOSTON':'BOS','ATLANTA':'ATL','MIAMI':'MIA','DALLAS':'DFW','DENVER':'DEN',
+        'MEXICO CITY':'MEX','SAO PAULO':'GRU','RIO':'GIG',
+        'DUBAI':'DXB','DOHA':'DOH','CAPE TOWN':'CPT','NAIROBI':'NBO',
+        'SINGAPORE':'SIN','KUALA LUMPUR':'KUL','BANGKOK':'BKK','PHUKET':'HKT','BALI':'DPS',
+        'SYDNEY':'SYD','MELBOURNE':'MEL','BRISBANE':'BNE','AUCKLAND':'AKL','HONG KONG':'HKG','TOKYO':'NRT','SEOUL':'ICN'
+      };
+
+      const key = NAME[k] || k;
+      const hit = P[key];
+      if(!hit){ logDiag('Unknown origin "' + code + '" — defaulting to LON', false); }
+      return hit || P['LON'];
+    }
+
+    function initControls(){
+      const $ = sel => document.querySelector(sel);
+      renderRegions();
+
+      // Date picker default = today
+      const departInput = document.getElementById('depart');
+      departInput.value = state.depart;
+      departInput.addEventListener('change', ()=>{ state.depart = departInput.value || todayISO(); });
+
+      // Sliders
+      $('#minTemp').addEventListener('input', e=> { state.minTemp = +e.target.value; $('#minTempVal').textContent = e.target.value; });
+      $('#maxRain').addEventListener('input', e=> { state.maxRain = +e.target.value; $('#maxRainVal').textContent = e.target.value; });
+      $('#maxHrs').addEventListener('input', e=> { state.maxHrs = +e.target.value; $('#maxHrsVal').textContent = e.target.value; });
+      $('#maxKm').addEventListener('input', e=> { state.maxKm = +e.target.value; $('#maxKmVal').textContent = e.target.value; });
+
+      // Unlimited toggles (default ON)
+      document.getElementById('hrsUnlimited').checked = true;
+      document.getElementById('kmUnlimited').checked = true;
+      document.getElementById('maxHrs').disabled = true;
+      document.getElementById('maxKm').disabled = true;
+      document.getElementById('hrsUnlimited').addEventListener('change', e=> { state.hrsUnlimited = e.target.checked; document.getElementById('maxHrs').disabled = state.hrsUnlimited; run(); });
+      document.getElementById('kmUnlimited').addEventListener('change', e=> { state.kmUnlimited = e.target.checked; document.getElementById('maxKm').disabled = state.kmUnlimited; run(); });
+
+      // Origin updated -> recompute
+      $('#origin').addEventListener('change', e=> {
+        state.origin = e.target.value.trim().toUpperCase();
+        const g = guessOriginCoords(state.origin);
+        logDiag('Origin set to ' + state.origin + ' → ' + g.lat.toFixed(3) + ', ' + g.lon.toFixed(3), true);
+        run();
+      });
+
+      $('#nights').addEventListener('change', e=> state.nights = +e.target.value);
+
+      document.getElementById('mode-week').addEventListener('click', ()=>{ state.mode='week'; setModeButtons(); run(); });
+      document.getElementById('mode-month').addEventListener('click', ()=>{ state.mode='month'; setModeButtons(); run(); });
+
+      document.querySelectorAll('.budget').forEach(cb=> cb.addEventListener('change', e=>{
+        if(e.target.checked) state.budgets.add(e.target.value);
+        else state.budgets.delete(e.target.value);
+      }));
+      document.addEventListener('change', (e)=>{
+        if(e.target.classList && e.target.classList.contains('region')){
+          if(e.target.checked) state.regions.add(e.target.value);
+          else state.regions.delete(e.target.value);
+        }
+      });
+
+      document.getElementById('provider').addEventListener('change', (e)=>{ AFFILIATE_MODE = e.target.value; run(); });
+
+      document.getElementById('controls').addEventListener('submit', (e)=>{ e.preventDefault(); run(); });
+      document.getElementById('refreshBtn').addEventListener('click', run);
+
+      // Init labels & diags
+      $('#minTemp').dispatchEvent(new Event('input'));
+      $('#maxRain').dispatchEvent(new Event('input'));
+      $('#maxHrs').dispatchEvent(new Event('input'));
+      $('#maxKm').dispatchEvent(new Event('input'));
+      logDiag('Mode default is week: ' + (state.mode==='week'), state.mode==='week');
+      logDiag('Buttons wired', true);
+      logDiag('Unlimited filters default ON', true);
+      logDiag('Native date picker active', true);
+    }
+
+    // ---------- Core run ----------
+    async function run(){
+      const closeCheapEl = document.getElementById('results-close-cheap');
+      const farExpEl = document.getElementById('results-far-expensive');
+      const nearBoujieEl = document.getElementById('results-near-boujie');
+      const farThriftyEl = document.getElementById('results-far-thrifty');
+      [closeCheapEl,farExpEl,nearBoujieEl,farThriftyEl].forEach(el=> el.innerHTML = "<div class='col-span-full text-sm text-gray-400'>Loading…</div>");
+
+      const originGuess = guessOriginCoords(state.origin);
+
+      // Wider “close” radius for AU/NZ
+      const inANZ = (originGuess.lat < -10 && originGuess.lat > -50 && originGuess.lon > 110 && originGuess.lon < 180);
+      const CLOSE_KM = inANZ ? 2500 : 2000;
+
+      const items = [];
+      await Promise.allSettled(DESTINATIONS.map(async (dest)=>{
+        if(!state.regions.has(dest.region)) return;
+        if(!state.budgets.has(dest.budget)) return;
+
+        const km = haversine(originGuess.lat, originGuess.lon, dest.lat, dest.lon);
+        const hrs = estFlightHours(km);
+        if(!state.kmUnlimited && km > state.maxKm) return;
+        if(!state.hrsUnlimited && hrs > state.maxHrs) return;
+
+        try{
+          const wx = state.mode==='week' ? await fetchForecast(dest.lat, dest.lon) : await fetchClimate(dest.lat, dest.lon);
+          const tempCheck = state.mode==='week' ? wx.avgTemp : wx.climTemp;
+          const rainCheck = state.mode==='week' ? wx.avgRain : (wx.climPrecip ?? 0)/2;
+          if(tempCheck < state.minTemp) return;
+          if(state.mode==='week' && rainCheck > state.maxRain) return;
+          const score = state.mode==='week' ? scoreForecast(wx) : scoreClimate(wx);
+          items.push({ ...dest, km, hrs, weather:wx, score, origin:originGuess });
+        }catch(e){ console.warn('weather fail', dest.city, e); }
+      }));
+
+      items.sort((a,b)=> b.score - a.score);
+
+      const closeCheap  = items.filter(p=> p.km<=CLOSE_KM && (p.budget==='cheap'||p.budget==='thrifty')).slice(0,10);
+      const farExp      = items.filter(p=> p.km> CLOSE_KM && (p.budget==='boujie'||p.budget==='expensive')).slice(0,10);
+      const nearBoujie  = items.filter(p=> p.km<=CLOSE_KM && (p.budget==='boujie'||p.budget==='expensive')).slice(0,10);
+      const farThrifty  = items.filter(p=> p.km> CLOSE_KM && (p.budget==='cheap'||p.budget==='thrifty')).slice(0,10);
+
+      const render = (el, arr)=>{
+        el.innerHTML = '';
+        if(arr.length===0){ el.innerHTML = "<div class='col-span-full text-sm text-gray-400'>No matches. Loosen filters.</div>"; return; }
+        arr.forEach(p=> el.appendChild(cardEl(p)));
+      };
+      render(closeCheapEl, closeCheap);
+      render(farExpEl, farExp);
+      render(nearBoujieEl, nearBoujie);
+      render(farThriftyEl, farThrifty);
+
+      const top = [...closeCheap, ...farExp, ...nearBoujie, ...farThrifty].slice(0,12);
+      if(world){
+        world.pointsData(top.map(p=>({ lat:p.lat, lng:p.lon, size:0.6, city:p.city })));
+        world.arcsData(top.map(p=>({ startLat:p.origin.lat, startLng:p.origin.lon, endLat:p.lat, endLng:p.lon })));
+      } else if(leafletMap){
+        leafletMap.eachLayer((layer)=>{ if(layer instanceof L.Polyline || layer instanceof L.Marker) leafletMap.removeLayer(layer); });
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 5, attribution: '&copy; OpenStreetMap' }).addTo(leafletMap);
+        const markers = [];
+        top.forEach(p=>{
+          const mk = L.marker([p.lat,p.lon]).addTo(leafletMap).bindPopup(p.city);
+          markers.push(mk);
+          L.polyline([[p.origin.lat,p.origin.lon],[p.lat,p.lon]], { color:'#67e8f9', weight:1 }).addTo(leafletMap);
+        });
+        if(markers.length){
+          const grp = L.featureGroup(markers);
+          leafletMap.fitBounds(grp.getBounds().pad(0.3));
+        }
+      }
+    }
+
+    function cardEl(p){
+      const el = document.createElement('article'); el.className = 'card p-4';
+      const departISO = state.depart || todayISO();
+      const retISO = addDaysISO(departISO, Number(state.nights||4));
+      const flights = flightsLink(state.origin, p.iata, departISO, state.nights);
+      const gm = gmSearch(p.city);
+      const wiki = wikiUrl(p.wiki);
+      const insta = instaLink(p.socials.ig);
+      const tw = xSearch(p.city + " travel");
+      const rating = sunRating(p.score);
+
+      let metricsHTML = '';
+      if(p.weather.kind === 'month'){
+        const t = p.weather.climTemp!=null ? fmt(p.weather.climTemp,1) + '°C' : '—';
+        const pr = p.weather.climPrecip!=null ? fmt(p.weather.climPrecip,0) + ' mm' : '—';
+        const sh = p.weather.climSunHrs!=null ? fmt(p.weather.climSunHrs,1) + 'h' : '—';
+        metricsHTML = ''
+          + '<div class="mt-3 grid grid-cols-3 gap-2 text-sm">'
+          +   '<div class="bg-black/30 rounded-lg p-2 text-center"><div class="text-[11px] text-gray-400">Mean temp</div><div class="text-lg">'+t+'</div></div>'
+          +   '<div class="bg-black/30 rounded-lg p-2 text-center"><div class="text-[11px] text-gray-400">Precip (month)</div><div class="text-lg">'+pr+'</div></div>'
+          +   '<div class="bg-black/30 rounded-lg p-2 text-center"><div class="text-[11px] text-gray-400">Sun (norm)</div><div class="text-lg">'+sh+'</div></div>'
+          + '</div>';
+      } else {
+        metricsHTML = ''
+          + '<div class="mt-3 grid grid-cols-3 gap-2 text-sm">'
+          +   '<div class="bg-black/30 rounded-lg p-2 text-center"><div class="text-[11px] text-gray-400">Avg max temp</div><div class="text-lg">'+fmt(p.weather.avgTemp,1)+'°C</div></div>'
+          +   '<div class="bg-black/30 rounded-lg p-2 text-center"><div class="text-[11px] text-gray-400">Avg rain prob</div><div class="text-lg">'+fmt(p.weather.avgRain,0)+'%</div></div>'
+          +   '<div class="bg-black/30 rounded-lg p-2 text-center"><div class="text-[11px] text-gray-400">Avg sun</div><div class="text-lg">'+fmt(p.weather.avgSunHrs,1)+'h</div></div>'
+          + '</div>';
+      }
+
+      el.innerHTML = ''
+        + '<div class="flex items-start justify-between gap-3">'
+        +   '<div>'
+        +     '<h3 class="font-semibold text-base">'+p.city+' <span class="text-gray-400 font-normal">• '+p.country+'</span></h3>'
+        +     '<div class="text-[12px] text-gray-400">'+fmt(p.km,0)+' km • ~'+fmt(p.hrs,1)+'h from '+state.origin+' • <span class="capitalize">'+p.budget+'</span> • <span class="muted">'+p.region+'</span></div>'
+        +   '</div>'
+        +   '<span class="text-xs px-2 py-1 rounded chip">Score '+fmt(p.score*100,0)+'</span>'
+        + '</div>'
+        + '<p class="text-[13px] text-gray-300 mt-1">'+(p.whyNow || '')+'</p>'
+        + '<p class="text-sm mt-2">'+rating.text+'</p>'
+        + metricsHTML
+        + '<div class="mt-3 flex flex-wrap gap-2 text-xs">'
+        +   '<a class="px-3 py-1 rounded-lg bg-cyan-600 hover:bg-cyan-500" href="'+flights+'" target="_blank" rel="noopener">Search flights</a>'
+        +   '<a class="px-3 py-1 rounded-lg bg-sky-800 hover:bg-sky-700" href="'+gm+'" target="_blank" rel="noopener">Google Maps</a>'
+        +   '<a class="px-3 py-1 rounded-lg bg-black/50 border border-white/10 hover:bg-black/40" href="'+wiki+'" target="_blank" rel="noopener">Wikipedia</a>'
+        +   '<a class="px-3 py-1 rounded-lg bg-black/50 border border-white/10 hover:bg-black/40" href="'+insta+'" target="_blank" rel="noopener">Instagram</a>'
+        +   '<a class="px-3 py-1 rounded-lg bg-black/50 border border-white/10 hover:bg-black/40" href="'+tw+'" target="_blank" rel="noopener">X / Twitter</a>'
+        +   '<button class="px-3 py-1 rounded-lg bg-black/50 border border-white/10 hover:bg-black/40" data-share>Share</button>'
+        + '</div>'
+        + '<p class="text-[12px] text-gray-400 mt-2">'
+        +   (state.mode==='week'
+              ? ('Dates: '+formatDM(departISO)+' → '+formatDM(addDaysISO(departISO, state.nights))+' • Live 7-day forecast.')
+              : ('Likely conditions next month (1991–2020 normals).'))
+        + '</p>';
+
+      el.querySelector('[data-share]').addEventListener('click', async ()=>{
+        try{ await navigator.clipboard.writeText(flights); alert('Flight search link copied!'); }
+        catch{ window.open(flights,'_blank'); }
+      });
+      return el;
+    }
+
+    // ---------- Boot ----------
+    window.addEventListener('DOMContentLoaded', async ()=>{
+      await initGlobeOrMap();
+      document.getElementById('depart').value = state.depart;
+      initControls();
+      setModeButtons();
+      run();
+    });
+  })();
+  </script>
+</body>
+</html>
