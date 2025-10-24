@@ -1,0 +1,2116 @@
+{
+  "schema": "v1-city-months",
+  "grid": 0.5,
+  "note": "Approximate normals for ranking. Months are '11' (Nov) and '12' (Dec). Units: tMean °C, rainyDayFrac 0-1, climSunDaily hours/day.",
+  "entries": [
+    {
+      "city": "Tenerife South",
+      "country": "Spain",
+      "iata": "TFS",
+      "lat": 28.05,
+      "lon": -16.57,
+      "months": {
+        "11": {
+          "tMean": 21.0,
+          "rainyDayFrac": 0.1,
+          "climSunDaily": 7.0
+        },
+        "12": {
+          "tMean": 19.0,
+          "rainyDayFrac": 0.12,
+          "climSunDaily": 6.6
+        }
+      }
+    },
+    {
+      "city": "Gran Canaria",
+      "country": "Spain",
+      "iata": "LPA",
+      "lat": 27.95,
+      "lon": -15.57,
+      "months": {
+        "11": {
+          "tMean": 21.0,
+          "rainyDayFrac": 0.1,
+          "climSunDaily": 7.0
+        },
+        "12": {
+          "tMean": 19.0,
+          "rainyDayFrac": 0.12,
+          "climSunDaily": 6.6
+        }
+      }
+    },
+    {
+      "city": "Lanzarote",
+      "country": "Spain",
+      "iata": "ACE",
+      "lat": 29.0,
+      "lon": -13.6,
+      "months": {
+        "11": {
+          "tMean": 21.0,
+          "rainyDayFrac": 0.1,
+          "climSunDaily": 7.0
+        },
+        "12": {
+          "tMean": 19.0,
+          "rainyDayFrac": 0.12,
+          "climSunDaily": 6.6
+        }
+      }
+    },
+    {
+      "city": "Fuerteventura",
+      "country": "Spain",
+      "iata": "FUE",
+      "lat": 28.45,
+      "lon": -13.86,
+      "months": {
+        "11": {
+          "tMean": 21.0,
+          "rainyDayFrac": 0.1,
+          "climSunDaily": 7.0
+        },
+        "12": {
+          "tMean": 19.0,
+          "rainyDayFrac": 0.12,
+          "climSunDaily": 6.6
+        }
+      }
+    },
+    {
+      "city": "Funchal",
+      "country": "Portugal",
+      "iata": "FNC",
+      "lat": 32.65,
+      "lon": -16.9,
+      "months": {
+        "11": {
+          "tMean": 18.0,
+          "rainyDayFrac": 0.31,
+          "climSunDaily": 5.3
+        },
+        "12": {
+          "tMean": 16.0,
+          "rainyDayFrac": 0.34,
+          "climSunDaily": 4.9
+        }
+      }
+    },
+    {
+      "city": "Larnaca",
+      "country": "Cyprus",
+      "iata": "LCA",
+      "lat": 34.9,
+      "lon": 33.6,
+      "months": {
+        "11": {
+          "tMean": 20.0,
+          "rainyDayFrac": 0.25,
+          "climSunDaily": 6.2
+        },
+        "12": {
+          "tMean": 16.0,
+          "rainyDayFrac": 0.32,
+          "climSunDaily": 5.0
+        }
+      }
+    },
+    {
+      "city": "Paphos",
+      "country": "Cyprus",
+      "iata": "PFO",
+      "lat": 34.76,
+      "lon": 32.43,
+      "months": {
+        "11": {
+          "tMean": 20.0,
+          "rainyDayFrac": 0.25,
+          "climSunDaily": 6.2
+        },
+        "12": {
+          "tMean": 16.0,
+          "rainyDayFrac": 0.32,
+          "climSunDaily": 5.0
+        }
+      }
+    },
+    {
+      "city": "Heraklion",
+      "country": "Greece",
+      "iata": "HER",
+      "lat": 35.34,
+      "lon": 25.13,
+      "months": {
+        "11": {
+          "tMean": 19.0,
+          "rainyDayFrac": 0.3,
+          "climSunDaily": 6.1
+        },
+        "12": {
+          "tMean": 15.0,
+          "rainyDayFrac": 0.38,
+          "climSunDaily": 4.7
+        }
+      }
+    },
+    {
+      "city": "Chania",
+      "country": "Greece",
+      "iata": "CHQ",
+      "lat": 35.51,
+      "lon": 24.02,
+      "months": {
+        "11": {
+          "tMean": 19.0,
+          "rainyDayFrac": 0.3,
+          "climSunDaily": 6.1
+        },
+        "12": {
+          "tMean": 15.0,
+          "rainyDayFrac": 0.38,
+          "climSunDaily": 4.7
+        }
+      }
+    },
+    {
+      "city": "Rhodes",
+      "country": "Greece",
+      "iata": "RHO",
+      "lat": 36.16,
+      "lon": 28.02,
+      "months": {
+        "11": {
+          "tMean": 17.0,
+          "rainyDayFrac": 0.3,
+          "climSunDaily": 5.5
+        },
+        "12": {
+          "tMean": 13.0,
+          "rainyDayFrac": 0.35,
+          "climSunDaily": 4.5
+        }
+      }
+    },
+    {
+      "city": "Kos",
+      "country": "Greece",
+      "iata": "KGS",
+      "lat": 36.8,
+      "lon": 27.09,
+      "months": {
+        "11": {
+          "tMean": 17.0,
+          "rainyDayFrac": 0.3,
+          "climSunDaily": 5.5
+        },
+        "12": {
+          "tMean": 13.0,
+          "rainyDayFrac": 0.35,
+          "climSunDaily": 4.5
+        }
+      }
+    },
+    {
+      "city": "Santorini",
+      "country": "Greece",
+      "iata": "JTR",
+      "lat": 36.41,
+      "lon": 25.43,
+      "months": {
+        "11": {
+          "tMean": 17.0,
+          "rainyDayFrac": 0.3,
+          "climSunDaily": 5.5
+        },
+        "12": {
+          "tMean": 13.0,
+          "rainyDayFrac": 0.35,
+          "climSunDaily": 4.5
+        }
+      }
+    },
+    {
+      "city": "Valletta",
+      "country": "Malta",
+      "iata": "MLA",
+      "lat": 35.9,
+      "lon": 14.51,
+      "months": {
+        "11": {
+          "tMean": 18.0,
+          "rainyDayFrac": 0.28,
+          "climSunDaily": 5.5
+        },
+        "12": {
+          "tMean": 15.0,
+          "rainyDayFrac": 0.32,
+          "climSunDaily": 4.7
+        }
+      }
+    },
+    {
+      "city": "Antalya",
+      "country": "Türkiye",
+      "iata": "AYT",
+      "lat": 36.9,
+      "lon": 30.8,
+      "months": {
+        "11": {
+          "tMean": 17.0,
+          "rainyDayFrac": 0.27,
+          "climSunDaily": 5.5
+        },
+        "12": {
+          "tMean": 12.0,
+          "rainyDayFrac": 0.33,
+          "climSunDaily": 4.5
+        }
+      }
+    },
+    {
+      "city": "Bodrum",
+      "country": "Türkiye",
+      "iata": "BJV",
+      "lat": 37.04,
+      "lon": 27.43,
+      "months": {
+        "11": {
+          "tMean": 17.0,
+          "rainyDayFrac": 0.27,
+          "climSunDaily": 5.5
+        },
+        "12": {
+          "tMean": 12.0,
+          "rainyDayFrac": 0.33,
+          "climSunDaily": 4.5
+        }
+      }
+    },
+    {
+      "city": "Faro (Algarve)",
+      "country": "Portugal",
+      "iata": "FAO",
+      "lat": 37.02,
+      "lon": -7.97,
+      "months": {
+        "11": {
+          "tMean": 17.0,
+          "rainyDayFrac": 0.25,
+          "climSunDaily": 5.6
+        },
+        "12": {
+          "tMean": 14.0,
+          "rainyDayFrac": 0.28,
+          "climSunDaily": 5.0
+        }
+      }
+    },
+    {
+      "city": "Seville",
+      "country": "Spain",
+      "iata": "SVQ",
+      "lat": 37.39,
+      "lon": -5.99,
+      "months": {
+        "11": {
+          "tMean": 18.0,
+          "rainyDayFrac": 0.2,
+          "climSunDaily": 6.0
+        },
+        "12": {
+          "tMean": 15.0,
+          "rainyDayFrac": 0.23,
+          "climSunDaily": 5.5
+        }
+      }
+    },
+    {
+      "city": "Malaga",
+      "country": "Spain",
+      "iata": "AGP",
+      "lat": 36.72,
+      "lon": -4.42,
+      "months": {
+        "11": {
+          "tMean": 18.0,
+          "rainyDayFrac": 0.2,
+          "climSunDaily": 6.0
+        },
+        "12": {
+          "tMean": 15.0,
+          "rainyDayFrac": 0.23,
+          "climSunDaily": 5.5
+        }
+      }
+    },
+    {
+      "city": "Marbella",
+      "country": "Spain",
+      "iata": "QRL",
+      "lat": 36.51,
+      "lon": -4.88,
+      "months": {
+        "11": {
+          "tMean": 18.0,
+          "rainyDayFrac": 0.2,
+          "climSunDaily": 6.0
+        },
+        "12": {
+          "tMean": 15.0,
+          "rainyDayFrac": 0.23,
+          "climSunDaily": 5.5
+        }
+      }
+    },
+    {
+      "city": "Alicante",
+      "country": "Spain",
+      "iata": "ALC",
+      "lat": 38.35,
+      "lon": -0.49,
+      "months": {
+        "11": {
+          "tMean": 18.0,
+          "rainyDayFrac": 0.2,
+          "climSunDaily": 6.0
+        },
+        "12": {
+          "tMean": 15.0,
+          "rainyDayFrac": 0.23,
+          "climSunDaily": 5.5
+        }
+      }
+    },
+    {
+      "city": "Palermo",
+      "country": "Italy",
+      "iata": "PMO",
+      "lat": 38.12,
+      "lon": 13.36,
+      "months": {
+        "11": {
+          "tMean": 16.0,
+          "rainyDayFrac": 0.27,
+          "climSunDaily": 5.0
+        },
+        "12": {
+          "tMean": 13.0,
+          "rainyDayFrac": 0.3,
+          "climSunDaily": 4.5
+        }
+      }
+    },
+    {
+      "city": "Catania",
+      "country": "Italy",
+      "iata": "CTA",
+      "lat": 37.51,
+      "lon": 15.08,
+      "months": {
+        "11": {
+          "tMean": 16.0,
+          "rainyDayFrac": 0.27,
+          "climSunDaily": 5.0
+        },
+        "12": {
+          "tMean": 13.0,
+          "rainyDayFrac": 0.3,
+          "climSunDaily": 4.5
+        }
+      }
+    },
+    {
+      "city": "Cagliari",
+      "country": "Italy",
+      "iata": "CAG",
+      "lat": 39.23,
+      "lon": 9.12,
+      "months": {
+        "11": {
+          "tMean": 16.0,
+          "rainyDayFrac": 0.27,
+          "climSunDaily": 5.0
+        },
+        "12": {
+          "tMean": 13.0,
+          "rainyDayFrac": 0.3,
+          "climSunDaily": 4.5
+        }
+      }
+    },
+    {
+      "city": "Naples",
+      "country": "Italy",
+      "iata": "NAP",
+      "lat": 40.85,
+      "lon": 14.27,
+      "months": {
+        "11": {
+          "tMean": 16.0,
+          "rainyDayFrac": 0.27,
+          "climSunDaily": 5.0
+        },
+        "12": {
+          "tMean": 13.0,
+          "rainyDayFrac": 0.3,
+          "climSunDaily": 4.5
+        }
+      }
+    },
+    {
+      "city": "Marrakech",
+      "country": "Morocco",
+      "iata": "RAK",
+      "lat": 31.63,
+      "lon": -8.0,
+      "months": {
+        "11": {
+          "tMean": 18.0,
+          "rainyDayFrac": 0.12,
+          "climSunDaily": 7.0
+        },
+        "12": {
+          "tMean": 14.0,
+          "rainyDayFrac": 0.11,
+          "climSunDaily": 6.5
+        }
+      }
+    },
+    {
+      "city": "Agadir",
+      "country": "Morocco",
+      "iata": "AGA",
+      "lat": 30.43,
+      "lon": -9.6,
+      "months": {
+        "11": {
+          "tMean": 20.0,
+          "rainyDayFrac": 0.1,
+          "climSunDaily": 7.5
+        },
+        "12": {
+          "tMean": 17.0,
+          "rainyDayFrac": 0.1,
+          "climSunDaily": 7.0
+        }
+      }
+    },
+    {
+      "city": "Essaouira",
+      "country": "Morocco",
+      "iata": "ESU",
+      "lat": 31.51,
+      "lon": -9.77,
+      "months": {
+        "11": {
+          "tMean": 20.0,
+          "rainyDayFrac": 0.1,
+          "climSunDaily": 7.5
+        },
+        "12": {
+          "tMean": 17.0,
+          "rainyDayFrac": 0.1,
+          "climSunDaily": 7.0
+        }
+      }
+    },
+    {
+      "city": "Sharm el-Sheikh",
+      "country": "Egypt",
+      "iata": "SSH",
+      "lat": 27.9,
+      "lon": 34.3,
+      "months": {
+        "11": {
+          "tMean": 23.0,
+          "rainyDayFrac": 0.04,
+          "climSunDaily": 8.5
+        },
+        "12": {
+          "tMean": 19.0,
+          "rainyDayFrac": 0.03,
+          "climSunDaily": 7.8
+        }
+      }
+    },
+    {
+      "city": "Hurghada",
+      "country": "Egypt",
+      "iata": "HRG",
+      "lat": 27.18,
+      "lon": 33.8,
+      "months": {
+        "11": {
+          "tMean": 23.0,
+          "rainyDayFrac": 0.04,
+          "climSunDaily": 8.5
+        },
+        "12": {
+          "tMean": 19.0,
+          "rainyDayFrac": 0.03,
+          "climSunDaily": 7.8
+        }
+      }
+    },
+    {
+      "city": "Marsa Alam",
+      "country": "Egypt",
+      "iata": "RMF",
+      "lat": 25.56,
+      "lon": 34.59,
+      "months": {
+        "11": {
+          "tMean": 23.0,
+          "rainyDayFrac": 0.04,
+          "climSunDaily": 8.5
+        },
+        "12": {
+          "tMean": 19.0,
+          "rainyDayFrac": 0.03,
+          "climSunDaily": 7.8
+        }
+      }
+    },
+    {
+      "city": "Eilat",
+      "country": "Israel",
+      "iata": "ETH",
+      "lat": 29.56,
+      "lon": 34.96,
+      "months": {
+        "11": {
+          "tMean": 21.0,
+          "rainyDayFrac": 0.04,
+          "climSunDaily": 8.0
+        },
+        "12": {
+          "tMean": 17.0,
+          "rainyDayFrac": 0.06,
+          "climSunDaily": 7.0
+        }
+      }
+    },
+    {
+      "city": "Tel Aviv",
+      "country": "Israel",
+      "iata": "TLV",
+      "lat": 32.08,
+      "lon": 34.78,
+      "months": {
+        "11": {
+          "tMean": 19.0,
+          "rainyDayFrac": 0.2,
+          "climSunDaily": 6.5
+        },
+        "12": {
+          "tMean": 16.0,
+          "rainyDayFrac": 0.24,
+          "climSunDaily": 5.8
+        }
+      }
+    },
+    {
+      "city": "Aqaba",
+      "country": "Jordan",
+      "iata": "AQJ",
+      "lat": 29.53,
+      "lon": 35.01,
+      "months": {
+        "11": {
+          "tMean": 21.0,
+          "rainyDayFrac": 0.04,
+          "climSunDaily": 8.0
+        },
+        "12": {
+          "tMean": 17.0,
+          "rainyDayFrac": 0.06,
+          "climSunDaily": 7.0
+        }
+      }
+    },
+    {
+      "city": "Dubai",
+      "country": "UAE",
+      "iata": "DXB",
+      "lat": 25.2,
+      "lon": 55.3,
+      "months": {
+        "11": {
+          "tMean": 25.0,
+          "rainyDayFrac": 0.02,
+          "climSunDaily": 9.1
+        },
+        "12": {
+          "tMean": 21.0,
+          "rainyDayFrac": 0.03,
+          "climSunDaily": 8.5
+        }
+      }
+    },
+    {
+      "city": "Abu Dhabi",
+      "country": "UAE",
+      "iata": "AUH",
+      "lat": 24.43,
+      "lon": 54.65,
+      "months": {
+        "11": {
+          "tMean": 25.0,
+          "rainyDayFrac": 0.02,
+          "climSunDaily": 9.1
+        },
+        "12": {
+          "tMean": 21.0,
+          "rainyDayFrac": 0.03,
+          "climSunDaily": 8.5
+        }
+      }
+    },
+    {
+      "city": "Ras Al Khaimah",
+      "country": "UAE",
+      "iata": "RKT",
+      "lat": 25.79,
+      "lon": 55.94,
+      "months": {
+        "11": {
+          "tMean": 25.0,
+          "rainyDayFrac": 0.02,
+          "climSunDaily": 9.1
+        },
+        "12": {
+          "tMean": 21.0,
+          "rainyDayFrac": 0.03,
+          "climSunDaily": 8.5
+        }
+      }
+    },
+    {
+      "city": "Muscat",
+      "country": "Oman",
+      "iata": "MCT",
+      "lat": 23.6,
+      "lon": 58.55,
+      "months": {
+        "11": {
+          "tMean": 26.0,
+          "rainyDayFrac": 0.02,
+          "climSunDaily": 9.3
+        },
+        "12": {
+          "tMean": 22.0,
+          "rainyDayFrac": 0.02,
+          "climSunDaily": 9.0
+        }
+      }
+    },
+    {
+      "city": "Salalah",
+      "country": "Oman",
+      "iata": "SLL",
+      "lat": 17.02,
+      "lon": 54.09,
+      "months": {
+        "11": {
+          "tMean": 26.0,
+          "rainyDayFrac": 0.02,
+          "climSunDaily": 9.0
+        },
+        "12": {
+          "tMean": 25.0,
+          "rainyDayFrac": 0.03,
+          "climSunDaily": 8.8
+        }
+      }
+    },
+    {
+      "city": "Doha",
+      "country": "Qatar",
+      "iata": "DOH",
+      "lat": 25.29,
+      "lon": 51.53,
+      "months": {
+        "11": {
+          "tMean": 24.0,
+          "rainyDayFrac": 0.02,
+          "climSunDaily": 8.8
+        },
+        "12": {
+          "tMean": 20.0,
+          "rainyDayFrac": 0.03,
+          "climSunDaily": 8.2
+        }
+      }
+    },
+    {
+      "city": "Manama",
+      "country": "Bahrain",
+      "iata": "BAH",
+      "lat": 26.27,
+      "lon": 50.59,
+      "months": {
+        "11": {
+          "tMean": 24.0,
+          "rainyDayFrac": 0.02,
+          "climSunDaily": 8.6
+        },
+        "12": {
+          "tMean": 20.0,
+          "rainyDayFrac": 0.03,
+          "climSunDaily": 8.1
+        }
+      }
+    },
+    {
+      "city": "Male (Maldives)",
+      "country": "Maldives",
+      "iata": "MLE",
+      "lat": 4.18,
+      "lon": 73.52,
+      "months": {
+        "11": {
+          "tMean": 27.0,
+          "rainyDayFrac": 0.25,
+          "climSunDaily": 7.0
+        },
+        "12": {
+          "tMean": 27.0,
+          "rainyDayFrac": 0.2,
+          "climSunDaily": 7.5
+        }
+      }
+    },
+    {
+      "city": "Mahe (Seychelles)",
+      "country": "Seychelles",
+      "iata": "SEZ",
+      "lat": -4.68,
+      "lon": 55.53,
+      "months": {
+        "11": {
+          "tMean": 27.0,
+          "rainyDayFrac": 0.35,
+          "climSunDaily": 6.5
+        },
+        "12": {
+          "tMean": 27.0,
+          "rainyDayFrac": 0.32,
+          "climSunDaily": 6.7
+        }
+      }
+    },
+    {
+      "city": "Mauritius",
+      "country": "Mauritius",
+      "iata": "MRU",
+      "lat": -20.3,
+      "lon": 57.5,
+      "months": {
+        "11": {
+          "tMean": 25.0,
+          "rainyDayFrac": 0.18,
+          "climSunDaily": 7.5
+        },
+        "12": {
+          "tMean": 26.0,
+          "rainyDayFrac": 0.22,
+          "climSunDaily": 8.0
+        }
+      }
+    },
+    {
+      "city": "Zanzibar",
+      "country": "Tanzania",
+      "iata": "ZNZ",
+      "lat": -6.16,
+      "lon": 39.2,
+      "months": {
+        "11": {
+          "tMean": 28.0,
+          "rainyDayFrac": 0.24,
+          "climSunDaily": 7.5
+        },
+        "12": {
+          "tMean": 29.0,
+          "rainyDayFrac": 0.22,
+          "climSunDaily": 8.0
+        }
+      }
+    },
+    {
+      "city": "Mombasa",
+      "country": "Kenya",
+      "iata": "MBA",
+      "lat": -4.04,
+      "lon": 39.67,
+      "months": {
+        "11": {
+          "tMean": 28.0,
+          "rainyDayFrac": 0.22,
+          "climSunDaily": 8.0
+        },
+        "12": {
+          "tMean": 29.0,
+          "rainyDayFrac": 0.16,
+          "climSunDaily": 8.5
+        }
+      }
+    },
+    {
+      "city": "Durban",
+      "country": "South Africa",
+      "iata": "DUR",
+      "lat": -29.86,
+      "lon": 31.02,
+      "months": {
+        "11": {
+          "tMean": 22.0,
+          "rainyDayFrac": 0.32,
+          "climSunDaily": 7.0
+        },
+        "12": {
+          "tMean": 24.0,
+          "rainyDayFrac": 0.34,
+          "climSunDaily": 7.5
+        }
+      }
+    },
+    {
+      "city": "Cape Town",
+      "country": "South Africa",
+      "iata": "CPT",
+      "lat": -33.92,
+      "lon": 18.42,
+      "months": {
+        "11": {
+          "tMean": 20.0,
+          "rainyDayFrac": 0.1,
+          "climSunDaily": 9.5
+        },
+        "12": {
+          "tMean": 21.0,
+          "rainyDayFrac": 0.06,
+          "climSunDaily": 10.0
+        }
+      }
+    },
+    {
+      "city": "Sal (Cape Verde)",
+      "country": "Cape Verde",
+      "iata": "SID",
+      "lat": 16.73,
+      "lon": -22.95,
+      "months": {
+        "11": {
+          "tMean": 25.0,
+          "rainyDayFrac": 0.06,
+          "climSunDaily": 8.0
+        },
+        "12": {
+          "tMean": 23.0,
+          "rainyDayFrac": 0.04,
+          "climSunDaily": 7.5
+        }
+      }
+    },
+    {
+      "city": "Boa Vista (CV)",
+      "country": "Cape Verde",
+      "iata": "BVC",
+      "lat": 16.13,
+      "lon": -22.89,
+      "months": {
+        "11": {
+          "tMean": 25.0,
+          "rainyDayFrac": 0.06,
+          "climSunDaily": 8.0
+        },
+        "12": {
+          "tMean": 23.0,
+          "rainyDayFrac": 0.04,
+          "climSunDaily": 7.5
+        }
+      }
+    },
+    {
+      "city": "Banjul",
+      "country": "Gambia",
+      "iata": "BJL",
+      "lat": 13.45,
+      "lon": -16.58,
+      "months": {
+        "11": {
+          "tMean": 29.0,
+          "rainyDayFrac": 0.05,
+          "climSunDaily": 8.0
+        },
+        "12": {
+          "tMean": 27.0,
+          "rainyDayFrac": 0.03,
+          "climSunDaily": 8.5
+        }
+      }
+    },
+    {
+      "city": "Dakar",
+      "country": "Senegal",
+      "iata": "DKR",
+      "lat": 14.69,
+      "lon": -17.45,
+      "months": {
+        "11": {
+          "tMean": 26.0,
+          "rainyDayFrac": 0.05,
+          "climSunDaily": 8.5
+        },
+        "12": {
+          "tMean": 23.0,
+          "rainyDayFrac": 0.05,
+          "climSunDaily": 8.0
+        }
+      }
+    },
+    {
+      "city": "Phuket",
+      "country": "Thailand",
+      "iata": "HKT",
+      "lat": 7.9,
+      "lon": 98.3,
+      "months": {
+        "11": {
+          "tMean": 27.0,
+          "rainyDayFrac": 0.35,
+          "climSunDaily": 6.0
+        },
+        "12": {
+          "tMean": 27.0,
+          "rainyDayFrac": 0.2,
+          "climSunDaily": 7.5
+        }
+      }
+    },
+    {
+      "city": "Krabi",
+      "country": "Thailand",
+      "iata": "KBV",
+      "lat": 8.1,
+      "lon": 98.91,
+      "months": {
+        "11": {
+          "tMean": 27.0,
+          "rainyDayFrac": 0.35,
+          "climSunDaily": 6.0
+        },
+        "12": {
+          "tMean": 27.0,
+          "rainyDayFrac": 0.22,
+          "climSunDaily": 7.2
+        }
+      }
+    },
+    {
+      "city": "Koh Samui",
+      "country": "Thailand",
+      "iata": "USM",
+      "lat": 9.56,
+      "lon": 100.06,
+      "months": {
+        "11": {
+          "tMean": 27.0,
+          "rainyDayFrac": 0.4,
+          "climSunDaily": 5.5
+        },
+        "12": {
+          "tMean": 27.0,
+          "rainyDayFrac": 0.3,
+          "climSunDaily": 6.5
+        }
+      }
+    },
+    {
+      "city": "Bangkok",
+      "country": "Thailand",
+      "iata": "BKK",
+      "lat": 13.75,
+      "lon": 100.5,
+      "months": {
+        "11": {
+          "tMean": 28.0,
+          "rainyDayFrac": 0.12,
+          "climSunDaily": 8.0
+        },
+        "12": {
+          "tMean": 26.0,
+          "rainyDayFrac": 0.05,
+          "climSunDaily": 8.5
+        }
+      }
+    },
+    {
+      "city": "Langkawi",
+      "country": "Malaysia",
+      "iata": "LGK",
+      "lat": 6.35,
+      "lon": 99.73,
+      "months": {
+        "11": {
+          "tMean": 28.0,
+          "rainyDayFrac": 0.32,
+          "climSunDaily": 6.5
+        },
+        "12": {
+          "tMean": 28.0,
+          "rainyDayFrac": 0.24,
+          "climSunDaily": 7.0
+        }
+      }
+    },
+    {
+      "city": "Penang",
+      "country": "Malaysia",
+      "iata": "PEN",
+      "lat": 5.29,
+      "lon": 100.27,
+      "months": {
+        "11": {
+          "tMean": 28.0,
+          "rainyDayFrac": 0.3,
+          "climSunDaily": 6.5
+        },
+        "12": {
+          "tMean": 28.0,
+          "rainyDayFrac": 0.24,
+          "climSunDaily": 7.0
+        }
+      }
+    },
+    {
+      "city": "Kuala Lumpur",
+      "country": "Malaysia",
+      "iata": "KUL",
+      "lat": 3.14,
+      "lon": 101.69,
+      "months": {
+        "11": {
+          "tMean": 27.0,
+          "rainyDayFrac": 0.35,
+          "climSunDaily": 6.0
+        },
+        "12": {
+          "tMean": 27.0,
+          "rainyDayFrac": 0.3,
+          "climSunDaily": 6.5
+        }
+      }
+    },
+    {
+      "city": "Bali (Denpasar)",
+      "country": "Indonesia",
+      "iata": "DPS",
+      "lat": -8.75,
+      "lon": 115.17,
+      "months": {
+        "11": {
+          "tMean": 28.0,
+          "rainyDayFrac": 0.35,
+          "climSunDaily": 6.5
+        },
+        "12": {
+          "tMean": 28.0,
+          "rainyDayFrac": 0.35,
+          "climSunDaily": 6.5
+        }
+      }
+    },
+    {
+      "city": "Lombok",
+      "country": "Indonesia",
+      "iata": "LOP",
+      "lat": -8.76,
+      "lon": 116.28,
+      "months": {
+        "11": {
+          "tMean": 28.0,
+          "rainyDayFrac": 0.35,
+          "climSunDaily": 6.5
+        },
+        "12": {
+          "tMean": 28.0,
+          "rainyDayFrac": 0.35,
+          "climSunDaily": 6.5
+        }
+      }
+    },
+    {
+      "city": "Nha Trang",
+      "country": "Vietnam",
+      "iata": "CXR",
+      "lat": 12.25,
+      "lon": 109.19,
+      "months": {
+        "11": {
+          "tMean": 26.0,
+          "rainyDayFrac": 0.2,
+          "climSunDaily": 7.5
+        },
+        "12": {
+          "tMean": 25.0,
+          "rainyDayFrac": 0.18,
+          "climSunDaily": 7.8
+        }
+      }
+    },
+    {
+      "city": "Phu Quoc",
+      "country": "Vietnam",
+      "iata": "PQC",
+      "lat": 10.23,
+      "lon": 103.96,
+      "months": {
+        "11": {
+          "tMean": 27.0,
+          "rainyDayFrac": 0.28,
+          "climSunDaily": 6.8
+        },
+        "12": {
+          "tMean": 27.0,
+          "rainyDayFrac": 0.2,
+          "climSunDaily": 7.5
+        }
+      }
+    },
+    {
+      "city": "Siem Reap",
+      "country": "Cambodia",
+      "iata": "REP",
+      "lat": 13.36,
+      "lon": 103.86,
+      "months": {
+        "11": {
+          "tMean": 27.0,
+          "rainyDayFrac": 0.12,
+          "climSunDaily": 8.0
+        },
+        "12": {
+          "tMean": 26.0,
+          "rainyDayFrac": 0.08,
+          "climSunDaily": 8.5
+        }
+      }
+    },
+    {
+      "city": "Colombo",
+      "country": "Sri Lanka",
+      "iata": "CMB",
+      "lat": 6.93,
+      "lon": 79.85,
+      "months": {
+        "11": {
+          "tMean": 28.0,
+          "rainyDayFrac": 0.35,
+          "climSunDaily": 6.5
+        },
+        "12": {
+          "tMean": 28.0,
+          "rainyDayFrac": 0.25,
+          "climSunDaily": 7.5
+        }
+      }
+    },
+    {
+      "city": "Aruba",
+      "country": "Aruba",
+      "iata": "AUA",
+      "lat": 12.51,
+      "lon": -70.02,
+      "months": {
+        "11": {
+          "tMean": 28.0,
+          "rainyDayFrac": 0.15,
+          "climSunDaily": 8.5
+        },
+        "12": {
+          "tMean": 27.5,
+          "rainyDayFrac": 0.12,
+          "climSunDaily": 8.5
+        }
+      }
+    },
+    {
+      "city": "Curaçao",
+      "country": "Curaçao",
+      "iata": "CUR",
+      "lat": 12.19,
+      "lon": -68.96,
+      "months": {
+        "11": {
+          "tMean": 28.0,
+          "rainyDayFrac": 0.15,
+          "climSunDaily": 8.5
+        },
+        "12": {
+          "tMean": 27.5,
+          "rainyDayFrac": 0.12,
+          "climSunDaily": 8.5
+        }
+      }
+    },
+    {
+      "city": "Bonaire",
+      "country": "Caribbean Netherlands",
+      "iata": "BON",
+      "lat": 12.15,
+      "lon": -68.28,
+      "months": {
+        "11": {
+          "tMean": 28.0,
+          "rainyDayFrac": 0.15,
+          "climSunDaily": 8.5
+        },
+        "12": {
+          "tMean": 27.5,
+          "rainyDayFrac": 0.12,
+          "climSunDaily": 8.5
+        }
+      }
+    },
+    {
+      "city": "Barbados",
+      "country": "Barbados",
+      "iata": "BGI",
+      "lat": 13.1,
+      "lon": -59.55,
+      "months": {
+        "11": {
+          "tMean": 27.0,
+          "rainyDayFrac": 0.35,
+          "climSunDaily": 7.0
+        },
+        "12": {
+          "tMean": 26.5,
+          "rainyDayFrac": 0.25,
+          "climSunDaily": 7.5
+        }
+      }
+    },
+    {
+      "city": "Antigua",
+      "country": "Antigua & Barbuda",
+      "iata": "ANU",
+      "lat": 17.12,
+      "lon": -61.78,
+      "months": {
+        "11": {
+          "tMean": 27.0,
+          "rainyDayFrac": 0.35,
+          "climSunDaily": 7.0
+        },
+        "12": {
+          "tMean": 26.5,
+          "rainyDayFrac": 0.25,
+          "climSunDaily": 7.5
+        }
+      }
+    },
+    {
+      "city": "St Lucia",
+      "country": "St Lucia",
+      "iata": "UVF",
+      "lat": 13.73,
+      "lon": -60.95,
+      "months": {
+        "11": {
+          "tMean": 27.0,
+          "rainyDayFrac": 0.35,
+          "climSunDaily": 7.0
+        },
+        "12": {
+          "tMean": 26.5,
+          "rainyDayFrac": 0.25,
+          "climSunDaily": 7.5
+        }
+      }
+    },
+    {
+      "city": "Grenada",
+      "country": "Grenada",
+      "iata": "GND",
+      "lat": 12.0,
+      "lon": -61.78,
+      "months": {
+        "11": {
+          "tMean": 27.0,
+          "rainyDayFrac": 0.35,
+          "climSunDaily": 7.0
+        },
+        "12": {
+          "tMean": 26.5,
+          "rainyDayFrac": 0.25,
+          "climSunDaily": 7.5
+        }
+      }
+    },
+    {
+      "city": "St Maarten",
+      "country": "Sint Maarten",
+      "iata": "SXM",
+      "lat": 18.04,
+      "lon": -63.11,
+      "months": {
+        "11": {
+          "tMean": 27.0,
+          "rainyDayFrac": 0.35,
+          "climSunDaily": 7.0
+        },
+        "12": {
+          "tMean": 26.5,
+          "rainyDayFrac": 0.25,
+          "climSunDaily": 7.5
+        }
+      }
+    },
+    {
+      "city": "Jamaica (Montego Bay)",
+      "country": "Jamaica",
+      "iata": "MBJ",
+      "lat": 18.5,
+      "lon": -77.91,
+      "months": {
+        "11": {
+          "tMean": 27.0,
+          "rainyDayFrac": 0.35,
+          "climSunDaily": 7.0
+        },
+        "12": {
+          "tMean": 26.5,
+          "rainyDayFrac": 0.25,
+          "climSunDaily": 7.5
+        }
+      }
+    },
+    {
+      "city": "Punta Cana",
+      "country": "Dominican Republic",
+      "iata": "PUJ",
+      "lat": 18.57,
+      "lon": -68.36,
+      "months": {
+        "11": {
+          "tMean": 27.0,
+          "rainyDayFrac": 0.35,
+          "climSunDaily": 7.0
+        },
+        "12": {
+          "tMean": 26.5,
+          "rainyDayFrac": 0.25,
+          "climSunDaily": 7.5
+        }
+      }
+    },
+    {
+      "city": "Puerto Plata",
+      "country": "Dominican Republic",
+      "iata": "POP",
+      "lat": 19.75,
+      "lon": -70.56,
+      "months": {
+        "11": {
+          "tMean": 27.0,
+          "rainyDayFrac": 0.35,
+          "climSunDaily": 7.0
+        },
+        "12": {
+          "tMean": 26.5,
+          "rainyDayFrac": 0.25,
+          "climSunDaily": 7.5
+        }
+      }
+    },
+    {
+      "city": "Nassau",
+      "country": "Bahamas",
+      "iata": "NAS",
+      "lat": 25.04,
+      "lon": -77.47,
+      "months": {
+        "11": {
+          "tMean": 25.0,
+          "rainyDayFrac": 0.27,
+          "climSunDaily": 7.0
+        },
+        "12": {
+          "tMean": 22.0,
+          "rainyDayFrac": 0.22,
+          "climSunDaily": 7.0
+        }
+      }
+    },
+    {
+      "city": "Providenciales",
+      "country": "Turks & Caicos",
+      "iata": "PLS",
+      "lat": 21.77,
+      "lon": -72.27,
+      "months": {
+        "11": {
+          "tMean": 26.0,
+          "rainyDayFrac": 0.22,
+          "climSunDaily": 7.5
+        },
+        "12": {
+          "tMean": 24.0,
+          "rainyDayFrac": 0.18,
+          "climSunDaily": 7.5
+        }
+      }
+    },
+    {
+      "city": "Cancún",
+      "country": "Mexico",
+      "iata": "CUN",
+      "lat": 21.16,
+      "lon": -86.85,
+      "months": {
+        "11": {
+          "tMean": 27.0,
+          "rainyDayFrac": 0.34,
+          "climSunDaily": 7.0
+        },
+        "12": {
+          "tMean": 26.0,
+          "rainyDayFrac": 0.24,
+          "climSunDaily": 7.5
+        }
+      }
+    },
+    {
+      "city": "Cozumel",
+      "country": "Mexico",
+      "iata": "CZM",
+      "lat": 20.51,
+      "lon": -86.95,
+      "months": {
+        "11": {
+          "tMean": 27.0,
+          "rainyDayFrac": 0.34,
+          "climSunDaily": 7.0
+        },
+        "12": {
+          "tMean": 26.0,
+          "rainyDayFrac": 0.24,
+          "climSunDaily": 7.5
+        }
+      }
+    },
+    {
+      "city": "Tulum",
+      "country": "Mexico",
+      "iata": "TUY",
+      "lat": 20.21,
+      "lon": -87.47,
+      "months": {
+        "11": {
+          "tMean": 27.0,
+          "rainyDayFrac": 0.34,
+          "climSunDaily": 7.0
+        },
+        "12": {
+          "tMean": 26.0,
+          "rainyDayFrac": 0.24,
+          "climSunDaily": 7.5
+        }
+      }
+    },
+    {
+      "city": "Puerto Vallarta",
+      "country": "Mexico",
+      "iata": "PVR",
+      "lat": 20.62,
+      "lon": -105.23,
+      "months": {
+        "11": {
+          "tMean": 27.0,
+          "rainyDayFrac": 0.08,
+          "climSunDaily": 8.5
+        },
+        "12": {
+          "tMean": 25.0,
+          "rainyDayFrac": 0.04,
+          "climSunDaily": 9.0
+        }
+      }
+    },
+    {
+      "city": "Los Cabos",
+      "country": "Mexico",
+      "iata": "SJD",
+      "lat": 23.15,
+      "lon": -109.72,
+      "months": {
+        "11": {
+          "tMean": 27.0,
+          "rainyDayFrac": 0.08,
+          "climSunDaily": 8.5
+        },
+        "12": {
+          "tMean": 25.0,
+          "rainyDayFrac": 0.04,
+          "climSunDaily": 9.0
+        }
+      }
+    },
+    {
+      "city": "Mazatlán",
+      "country": "Mexico",
+      "iata": "MZT",
+      "lat": 23.22,
+      "lon": -106.42,
+      "months": {
+        "11": {
+          "tMean": 27.0,
+          "rainyDayFrac": 0.08,
+          "climSunDaily": 8.5
+        },
+        "12": {
+          "tMean": 25.0,
+          "rainyDayFrac": 0.04,
+          "climSunDaily": 9.0
+        }
+      }
+    },
+    {
+      "city": "Huatulco",
+      "country": "Mexico",
+      "iata": "HUX",
+      "lat": 15.77,
+      "lon": -96.26,
+      "months": {
+        "11": {
+          "tMean": 27.0,
+          "rainyDayFrac": 0.08,
+          "climSunDaily": 8.5
+        },
+        "12": {
+          "tMean": 25.0,
+          "rainyDayFrac": 0.04,
+          "climSunDaily": 9.0
+        }
+      }
+    },
+    {
+      "city": "Ixtapa",
+      "country": "Mexico",
+      "iata": "ZIH",
+      "lat": 17.65,
+      "lon": -101.61,
+      "months": {
+        "11": {
+          "tMean": 27.0,
+          "rainyDayFrac": 0.08,
+          "climSunDaily": 8.5
+        },
+        "12": {
+          "tMean": 25.0,
+          "rainyDayFrac": 0.04,
+          "climSunDaily": 9.0
+        }
+      }
+    },
+    {
+      "city": "Playa del Carmen",
+      "country": "Mexico",
+      "iata": "PCM",
+      "lat": 20.62,
+      "lon": -87.08,
+      "months": {
+        "11": {
+          "tMean": 27.0,
+          "rainyDayFrac": 0.34,
+          "climSunDaily": 7.0
+        },
+        "12": {
+          "tMean": 26.0,
+          "rainyDayFrac": 0.24,
+          "climSunDaily": 7.5
+        }
+      }
+    },
+    {
+      "city": "Liberia (Guanacaste)",
+      "country": "Costa Rica",
+      "iata": "LIR",
+      "lat": 10.6,
+      "lon": -85.54,
+      "months": {
+        "11": {
+          "tMean": 27.0,
+          "rainyDayFrac": 0.15,
+          "climSunDaily": 8.0
+        },
+        "12": {
+          "tMean": 27.0,
+          "rainyDayFrac": 0.1,
+          "climSunDaily": 8.5
+        }
+      }
+    },
+    {
+      "city": "San José (city)",
+      "country": "Costa Rica",
+      "iata": "SJO",
+      "lat": 9.93,
+      "lon": -84.1,
+      "months": {
+        "11": {
+          "tMean": 20.0,
+          "rainyDayFrac": 0.28,
+          "climSunDaily": 6.0
+        },
+        "12": {
+          "tMean": 19.0,
+          "rainyDayFrac": 0.2,
+          "climSunDaily": 6.5
+        }
+      }
+    },
+    {
+      "city": "Panama City",
+      "country": "Panama",
+      "iata": "PTY",
+      "lat": 9.1,
+      "lon": -79.38,
+      "months": {
+        "11": {
+          "tMean": 27.0,
+          "rainyDayFrac": 0.34,
+          "climSunDaily": 6.5
+        },
+        "12": {
+          "tMean": 27.0,
+          "rainyDayFrac": 0.22,
+          "climSunDaily": 7.0
+        }
+      }
+    },
+    {
+      "city": "Bocas del Toro",
+      "country": "Panama",
+      "iata": "BOC",
+      "lat": 9.34,
+      "lon": -82.25,
+      "months": {
+        "11": {
+          "tMean": 27.0,
+          "rainyDayFrac": 0.4,
+          "climSunDaily": 5.8
+        },
+        "12": {
+          "tMean": 27.0,
+          "rainyDayFrac": 0.3,
+          "climSunDaily": 6.5
+        }
+      }
+    },
+    {
+      "city": "Belize City",
+      "country": "Belize",
+      "iata": "BZE",
+      "lat": 17.5,
+      "lon": -88.2,
+      "months": {
+        "11": {
+          "tMean": 26.0,
+          "rainyDayFrac": 0.35,
+          "climSunDaily": 6.8
+        },
+        "12": {
+          "tMean": 25.0,
+          "rainyDayFrac": 0.22,
+          "climSunDaily": 7.5
+        }
+      }
+    },
+    {
+      "city": "Ambergris Caye",
+      "country": "Belize",
+      "iata": "SPR",
+      "lat": 17.92,
+      "lon": -87.95,
+      "months": {
+        "11": {
+          "tMean": 26.0,
+          "rainyDayFrac": 0.35,
+          "climSunDaily": 6.8
+        },
+        "12": {
+          "tMean": 25.0,
+          "rainyDayFrac": 0.22,
+          "climSunDaily": 7.5
+        }
+      }
+    },
+    {
+      "city": "Cartagena",
+      "country": "Colombia",
+      "iata": "CTG",
+      "lat": 10.39,
+      "lon": -75.48,
+      "months": {
+        "11": {
+          "tMean": 28.0,
+          "rainyDayFrac": 0.22,
+          "climSunDaily": 7.5
+        },
+        "12": {
+          "tMean": 28.0,
+          "rainyDayFrac": 0.18,
+          "climSunDaily": 8.0
+        }
+      }
+    },
+    {
+      "city": "Santa Marta",
+      "country": "Colombia",
+      "iata": "SMR",
+      "lat": 11.24,
+      "lon": -74.2,
+      "months": {
+        "11": {
+          "tMean": 28.0,
+          "rainyDayFrac": 0.22,
+          "climSunDaily": 7.5
+        },
+        "12": {
+          "tMean": 28.0,
+          "rainyDayFrac": 0.18,
+          "climSunDaily": 8.0
+        }
+      }
+    },
+    {
+      "city": "Rio de Janeiro",
+      "country": "Brazil",
+      "iata": "GIG",
+      "lat": -22.91,
+      "lon": -43.17,
+      "months": {
+        "11": {
+          "tMean": 24.0,
+          "rainyDayFrac": 0.32,
+          "climSunDaily": 7.0
+        },
+        "12": {
+          "tMean": 26.0,
+          "rainyDayFrac": 0.36,
+          "climSunDaily": 6.8
+        }
+      }
+    },
+    {
+      "city": "Recife",
+      "country": "Brazil",
+      "iata": "REC",
+      "lat": -8.05,
+      "lon": -34.91,
+      "months": {
+        "11": {
+          "tMean": 27.0,
+          "rainyDayFrac": 0.2,
+          "climSunDaily": 8.5
+        },
+        "12": {
+          "tMean": 28.0,
+          "rainyDayFrac": 0.18,
+          "climSunDaily": 8.8
+        }
+      }
+    },
+    {
+      "city": "Fortaleza",
+      "country": "Brazil",
+      "iata": "FOR",
+      "lat": -3.73,
+      "lon": -38.5,
+      "months": {
+        "11": {
+          "tMean": 27.0,
+          "rainyDayFrac": 0.2,
+          "climSunDaily": 8.5
+        },
+        "12": {
+          "tMean": 28.0,
+          "rainyDayFrac": 0.18,
+          "climSunDaily": 8.8
+        }
+      }
+    },
+    {
+      "city": "Miami",
+      "country": "USA",
+      "iata": "MIA",
+      "lat": 25.76,
+      "lon": -80.19,
+      "months": {
+        "11": {
+          "tMean": 24.0,
+          "rainyDayFrac": 0.22,
+          "climSunDaily": 7.5
+        },
+        "12": {
+          "tMean": 22.0,
+          "rainyDayFrac": 0.2,
+          "climSunDaily": 7.0
+        }
+      }
+    },
+    {
+      "city": "Key West",
+      "country": "USA",
+      "iata": "EYW",
+      "lat": 24.56,
+      "lon": -81.78,
+      "months": {
+        "11": {
+          "tMean": 25.0,
+          "rainyDayFrac": 0.2,
+          "climSunDaily": 7.5
+        },
+        "12": {
+          "tMean": 23.0,
+          "rainyDayFrac": 0.18,
+          "climSunDaily": 7.0
+        }
+      }
+    },
+    {
+      "city": "Orlando",
+      "country": "USA",
+      "iata": "MCO",
+      "lat": 28.43,
+      "lon": -81.31,
+      "months": {
+        "11": {
+          "tMean": 22.0,
+          "rainyDayFrac": 0.24,
+          "climSunDaily": 7.0
+        },
+        "12": {
+          "tMean": 20.0,
+          "rainyDayFrac": 0.24,
+          "climSunDaily": 6.5
+        }
+      }
+    },
+    {
+      "city": "Honolulu (Oahu)",
+      "country": "USA",
+      "iata": "HNL",
+      "lat": 21.31,
+      "lon": -157.86,
+      "months": {
+        "11": {
+          "tMean": 25.0,
+          "rainyDayFrac": 0.18,
+          "climSunDaily": 7.5
+        },
+        "12": {
+          "tMean": 24.0,
+          "rainyDayFrac": 0.2,
+          "climSunDaily": 7.0
+        }
+      }
+    },
+    {
+      "city": "Kahului (Maui)",
+      "country": "USA",
+      "iata": "OGG",
+      "lat": 20.89,
+      "lon": -156.47,
+      "months": {
+        "11": {
+          "tMean": 25.0,
+          "rainyDayFrac": 0.18,
+          "climSunDaily": 7.5
+        },
+        "12": {
+          "tMean": 24.0,
+          "rainyDayFrac": 0.2,
+          "climSunDaily": 7.0
+        }
+      }
+    },
+    {
+      "city": "Perth",
+      "country": "Australia",
+      "iata": "PER",
+      "lat": -31.95,
+      "lon": 115.86,
+      "months": {
+        "11": {
+          "tMean": 22.0,
+          "rainyDayFrac": 0.05,
+          "climSunDaily": 10.5
+        },
+        "12": {
+          "tMean": 25.0,
+          "rainyDayFrac": 0.03,
+          "climSunDaily": 11.0
+        }
+      }
+    },
+    {
+      "city": "Sydney",
+      "country": "Australia",
+      "iata": "SYD",
+      "lat": -33.87,
+      "lon": 151.21,
+      "months": {
+        "11": {
+          "tMean": 24.0,
+          "rainyDayFrac": 0.24,
+          "climSunDaily": 8.5
+        },
+        "12": {
+          "tMean": 26.0,
+          "rainyDayFrac": 0.28,
+          "climSunDaily": 9.0
+        }
+      }
+    },
+    {
+      "city": "Brisbane",
+      "country": "Australia",
+      "iata": "BNE",
+      "lat": -27.47,
+      "lon": 153.02,
+      "months": {
+        "11": {
+          "tMean": 24.0,
+          "rainyDayFrac": 0.24,
+          "climSunDaily": 8.5
+        },
+        "12": {
+          "tMean": 26.0,
+          "rainyDayFrac": 0.28,
+          "climSunDaily": 9.0
+        }
+      }
+    },
+    {
+      "city": "Gold Coast",
+      "country": "Australia",
+      "iata": "OOL",
+      "lat": -28.02,
+      "lon": 153.43,
+      "months": {
+        "11": {
+          "tMean": 24.0,
+          "rainyDayFrac": 0.24,
+          "climSunDaily": 8.5
+        },
+        "12": {
+          "tMean": 26.0,
+          "rainyDayFrac": 0.28,
+          "climSunDaily": 9.0
+        }
+      }
+    },
+    {
+      "city": "Nadi",
+      "country": "Fiji",
+      "iata": "NAN",
+      "lat": -17.76,
+      "lon": 177.44,
+      "months": {
+        "11": {
+          "tMean": 27.0,
+          "rainyDayFrac": 0.25,
+          "climSunDaily": 7.5
+        },
+        "12": {
+          "tMean": 28.0,
+          "rainyDayFrac": 0.3,
+          "climSunDaily": 7.5
+        }
+      }
+    },
+    {
+      "city": "Papeete (Tahiti)",
+      "country": "French Polynesia",
+      "iata": "PPT",
+      "lat": -17.55,
+      "lon": -149.57,
+      "months": {
+        "11": {
+          "tMean": 27.0,
+          "rainyDayFrac": 0.3,
+          "climSunDaily": 7.5
+        },
+        "12": {
+          "tMean": 28.0,
+          "rainyDayFrac": 0.35,
+          "climSunDaily": 7.5
+        }
+      }
+    },
+    {
+      "city": "Valencia",
+      "country": "Spain",
+      "iata": "VLC",
+      "lat": 39.47,
+      "lon": -0.38,
+      "months": {
+        "11": {
+          "tMean": 18.0,
+          "rainyDayFrac": 0.2,
+          "climSunDaily": 6.0
+        },
+        "12": {
+          "tMean": 15.0,
+          "rainyDayFrac": 0.23,
+          "climSunDaily": 5.5
+        }
+      }
+    },
+    {
+      "city": "Murcia",
+      "country": "Spain",
+      "iata": "RMU",
+      "lat": 37.8,
+      "lon": -1.13,
+      "months": {
+        "11": {
+          "tMean": 18.0,
+          "rainyDayFrac": 0.2,
+          "climSunDaily": 6.0
+        },
+        "12": {
+          "tMean": 15.0,
+          "rainyDayFrac": 0.23,
+          "climSunDaily": 5.5
+        }
+      }
+    },
+    {
+      "city": "Aegean Coast (Izmir)",
+      "country": "Türkiye",
+      "iata": "ADB",
+      "lat": 38.29,
+      "lon": 27.16,
+      "months": {
+        "11": {
+          "tMean": 17.0,
+          "rainyDayFrac": 0.27,
+          "climSunDaily": 5.5
+        },
+        "12": {
+          "tMean": 12.0,
+          "rainyDayFrac": 0.33,
+          "climSunDaily": 4.5
+        }
+      }
+    }
+  ]
+}
