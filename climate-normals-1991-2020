@@ -1,0 +1,25 @@
+{
+  "38.50,-9.00": {
+    "1": { "tMean": 12.0, "rainyDayFrac": 0.30, "climSunDaily": 4.5 },
+    "2": { "tMean": 13.0, "rainyDayFrac": 0.28, "climSunDaily": 5.2 },
+    "3": { "tMean": 15.0, "rainyDayFrac": 0.24, "climSunDaily": 6.1 },
+    "4": { "tMean": 16.5, "rainyDayFrac": 0.20, "climSunDaily": 7.5 },
+    "5": { "tMean": 18.0, "rainyDayFrac": 0.15, "climSunDaily": 8.5 },
+    "6": { "tMean": 21.0, "rainyDayFrac": 0.05, "climSunDaily": 10.5 },
+    "7": { "tMean": 23.5, "rainyDayFrac": 0.02, "climSunDaily": 11.0 },
+    "8": { "tMean": 24.0, "rainyDayFrac": 0.03, "climSunDaily": 10.5 },
+    "9": { "tMean": 22.5, "rainyDayFrac": 0.10, "climSunDaily": 8.0 },
+    "10": { "tMean": 19.5, "rainyDayFrac": 0.22, "climSunDaily": 6.5 },
+    "11": { "tMean": 16.0, "rainyDayFrac": 0.28, "climSunDaily": 5.0 },
+    "12": { "tMean": 13.0, "rainyDayFrac": 0.30, "climSunDaily": 4.2 }
+  },
+  "40.50,-74.00": {
+    "1": { "tMean": 0.5 },
+    "7": { "tMean": 25.0 }
+    /* Incomplete data is fine, as per your instruction */
+  },
+  "DXB": {
+    "1": { "tMean": 19.5, "climSunDaily": 8.5 },
+    "7": { "tMean": 37.0, "climSunDaily": 11.5 }
+  }
+}
