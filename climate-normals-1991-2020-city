@@ -1,0 +1,104 @@
+{
+  "entries": [
+    {
+      "city": "Lisbon",
+      "iata": "LIS",
+      "lat": 38.7223,
+      "lon": -9.1393,
+      "months": {
+        "1":  { "tMean": 12.0, "rainyDayFrac": 0.30, "climSunDaily": 4.5 },
+        "2":  { "tMean": 13.0, "rainyDayFrac": 0.28, "climSunDaily": 5.2 },
+        "3":  { "tMean": 15.0, "rainyDayFrac": 0.24, "climSunDaily": 6.1 },
+        "4":  { "tMean": 16.5, "rainyDayFrac": 0.20, "climSunDaily": 7.5 },
+        "5":  { "tMean": 18.0, "rainyDayFrac": 0.15, "climSunDaily": 8.5 },
+        "6":  { "tMean": 21.0, "rainyDayFrac": 0.05, "climSunDaily": 10.5 },
+        "7":  { "tMean": 23.5, "rainyDayFrac": 0.02, "climSunDaily": 11.0 },
+        "8":  { "tMean": 24.0, "rainyDayFrac": 0.03, "climSunDaily": 10.5 },
+        "9":  { "tMean": 22.5, "rainyDayFrac": 0.10, "climSunDaily": 8.0 },
+        "10": { "tMean": 19.5, "rainyDayFrac": 0.22, "climSunDaily": 6.5 },
+        "11": { "tMean": 16.0, "rainyDayFrac": 0.28, "climSunDaily": 5.0 },
+        "12": { "tMean": 13.0, "rainyDayFrac": 0.30, "climSunDaily": 4.2 }
+      }
+    },
+    {
+      "city": "New York City",
+      "iata": "JFK",
+      "lat": 40.7128,
+      "lon": -74.0060,
+      "months": {
+        "1":  { "tMean": 0.0,  "rainyDayFrac": 0.35, "climSunDaily": 5.5 },
+        "2":  { "tMean": 1.5,  "rainyDayFrac": 0.30, "climSunDaily": 6.0 },
+        "3":  { "tMean": 5.5,  "rainyDayFrac": 0.35, "climSunDaily": 6.5 },
+        "4":  { "tMean": 12.0, "rainyDayFrac": 0.35, "climSunDaily": 7.0 },
+        "5":  { "tMean": 17.5, "rainyDayFrac": 0.30, "climSunDaily": 8.0 },
+        "6":  { "tMean": 22.5, "rainyDayFrac": 0.30, "climSunDaily": 9.0 },
+        "7":  { "tMean": 25.5, "rainyDayFrac": 0.30, "climSunDaily": 9.5 },
+        "8":  { "tMean": 24.5, "rainyDayFrac": 0.30, "climSunDaily": 8.5 },
+        "9":  { "tMean": 20.5, "rainyDayFrac": 0.25, "climSunDaily": 7.5 },
+        "10": { "tMean": 14.5, "rainyDayFrac": 0.25, "climSunDaily": 6.5 },
+        "11": { "tMean": 8.5,  "rainyDayFrac": 0.30, "climSunDaily": 5.0 },
+        "12": { "tMean": 3.0,  "rainyDayFrac": 0.35, "climSunDaily": 5.0 }
+      }
+    },
+    {
+      "city": "Sydney",
+      "iata": "SYD",
+      "lat": -33.8688,
+      "lon": 151.2093,
+      "months": {
+        "1":  { "tMean": 23.5, "rainyDayFrac": 0.25, "climSunDaily": 7.0 },
+        "2":  { "tMean": 23.0, "rainyDayFrac": 0.25, "climSunDaily": 6.5 },
+        "3":  { "tMean": 21.5, "rainyDayFrac": 0.28, "climSunDaily": 6.0 },
+        "4":  { "tMean": 18.5, "rainyDayFrac": 0.25, "climSunDaily": 6.5 },
+        "5":  { "tMean": 15.0, "rainyDayFrac": 0.25, "climSunDaily": 6.5 },
+        "6":  { "tMean": 12.5, "rainyDayFrac": 0.20, "climSunDaily": 7.0 },
+        "7":  { "tMean": 11.5, "rainyDayFrac": 0.20, "climSunDaily": 7.5 },
+        "8":  { "tMean": 13.0, "rainyDayFrac": 0.20, "climSunDaily": 7.5 },
+        "9":  { "tMean": 15.5, "rainyDayFrac": 0.20, "climSunDaily": 7.0 },
+        "10": { "tMean": 18.0, "rainyDayFrac": 0.25, "climSunDaily": 7.0 },
+        "11": { "tMean": 20.5, "rainyDayFrac": 0.25, "climSunDaily": 7.0 },
+        "12": { "tMean": 22.5, "rainyDayFrac": 0.25, "climSunDaily": 7.0 }
+      }
+    },
+    {
+      "city": "Dubai",
+      "iata": "DXB",
+      "lat": 25.2048,
+      "lon": 55.2708,
+      "months": {
+        "1":  { "tMean": 19.5, "rainyDayFrac": 0.05, "climSunDaily": 8.5 },
+        "2":  { "tMean": 20.5, "rainyDayFrac": 0.05, "climSunDaily": 9.0 },
+        "3":  { "tMean": 24.0, "rainyDayFrac": 0.04, "climSunDaily": 9.5 },
+        "4":  { "tMean": 28.5, "rainyDayFrac": 0.02, "climSunDaily": 10.0 },
+        "5":  { "tMean": 33.0, "rainyDayFrac": 0.01, "climSunDaily": 11.0 },
+        "6":  { "tMean": 35.5, "rainyDayFrac": 0.00, "climSunDaily": 12.0 },
+        "7":  { "tMean": 37.0, "rainyDayFrac": 0.00, "climSunDaily": 11.5 },
+        "8":  { "tMean": 36.5, "rainyDayFrac": 0.00, "climSunDaily": 11.0 },
+        "9":  { "tMean": 33.5, "rainyDayFrac": 0.00, "climSunDaily": 10.5 },
+        "10": { "tMean": 30.0, "rainyDayFrac": 0.01, "climSunDaily": 10.0 },
+        "11": { "tMean": 25.5, "rainyDayFrac": 0.02, "climSunDaily": 9.0 },
+        "12": { "tMean": 21.5, "rainyDayFrac": 0.03, "climSunDaily": 8.5 }
+      }
+    },
+    {
+      "city": "Paris",
+      "iata": "CDG",
+      "lat": 48.8566,
+      "lon": 2.3522,
+      "months": {
+        "1":  { "tMean": 5.0,  "rainyDayFrac": 0.40, "climSunDaily": 2.5 },
+        "2":  { "tMean": 6.0,  "rainyDayFrac": 0.35, "climSunDaily": 3.5 },
+        "3":  { "tMean": 9.0,  "rainyDayFrac": 0.30, "climSunDaily": 5.0 },
+        "4":  { "tMean": 11.5, "rainyDayFrac": 0.30, "climSunDaily": 6.0 },
+        "5":  { "tMean": 15.5, "rainyDayFrac": 0.30, "climSunDaily": 7.0 },
+        "6":  { "tMean": 18.5, "rainyDayFrac": 0.28, "climSunDaily": 8.5 },
+        "7":  { "tMean": 20.5, "rainyDayFrac": 0.25, "climSunDaily": 8.5 },
+        "8":  { "tMean": 20.0, "rainyDayFrac": 0.25, "climSunDaily": 8.0 },
+        "9":  { "tMean": 17.0, "rainyDayFrac": 0.30, "climSunDaily": 6.5 },
+        "10": { "tMean": 13.0, "rainyDayFrac": 0.35, "climSunDaily": 4.5 },
+        "11": { "tMean": 8.5,  "rainyDayFrac": 0.40, "climSunDaily": 3.0 },
+        "12": { "tMean": 5.5,  "rainyDayFrac": 0.40, "climSunDaily": 2.5 }
+      }
+    }
+  ]
+}
